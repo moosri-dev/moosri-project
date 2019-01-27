@@ -1,3 +1,8 @@
+<?php
+	// $pathRoot = $_SERVER["DOCUMENT_ROOT"];
+	include(__DIR__."/src/config/config.php");
+	include ($DOCUMENT_ROOT."/moosri-project/src/config/connect-db.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
