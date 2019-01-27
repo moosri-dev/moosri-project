@@ -1,0 +1,51 @@
+
+:root{
+
+	/*font default*/
+	--font-family-base: Superspace;
+	--font-weight-light-base: 300;
+	--font-weight-regular-base: 400;
+	--font-weight-bold-base: 700;
+	--font-size-base: 14px;
+
+	/*color default*/
+	--blue-color-base: #0069aa;
+	--lightgray-color-base: #f2f2f2;
+	--brown-color-base: #a52a2a;
+}
+
+
+body{
+	font-family: var(--font-family-base);
+	font-weight: var(--font-weight-regular-base);
+	font-size: var(--font-size-base);
+}
+
+.margin-top-80{
+	margin-top: 80px;
+}
+.margin-bottom-100{
+	margin-bottom: 100px;
+}
+.img-height-150{
+	height: 150px;
+}
+.bg-dark-green{
+	background-color: #56482c;
+}
+
+.my-card{
+	position: relative;
+}
+.my-card>.icon{
+	position: absolute;
+	bottom: 2px;
+    right: 10px;
+    font-weight: var(--font-weight-bold-base);;
+}
+.btn-padding{
+	padding: 2px 50px;
+}
+.bg-brown{
+	background-color: var(--brown-color-base);
+}
