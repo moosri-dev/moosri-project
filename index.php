@@ -1,5 +1,4 @@
 <?php
-	// $pathRoot = $_SERVER["DOCUMENT_ROOT"];
 	include(__DIR__."/src/config/config.php");
 	include ($DOCUMENT_ROOT."/moosri-project/src/config/connect-db.php");
 ?>
@@ -7,8 +6,7 @@
 <html lang="en">
 	<head>
 		<?php include __DIR__ . '/src/assets/scripts/script.html'; ?>
-
-		<link rel="stylesheet" type="text/css" href="/moosi-massage/src/assets/css/style.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo $project_name.'/src/assets/css/style.css';?>">
 	</head>
 	<body>
 		<!-- header -->
@@ -54,7 +52,13 @@
 	        <!-- /.col-lg-8 -->
 	        <div class="col-lg-4">
 	          		<h3>หมู่ 4 นวดแผนไทย</h3>
-	          		<p>การนวดที่เป็นเอกลักษณ์ของเราพร้อมด้วยเทคนิคหลากหลายที่ได้รับแรงบันดาลใจจากการนวดแบบเอเชียที่เป็นที่นิยม เหมาะสำหรับบรรเทาความตึงเครียดตึงและปวดเมื่อยตามร่างกาย</p>
+								<p>การนวดที่เป็นเอกลักษณ์ของเราพร้อมด้วยเทคนิคหลากหลายที่ได้รับแรงบันดาลใจจากการนวดแบบเอเชียที่เป็นที่นิยม เหมาะสำหรับบรรเทาความตึงเครียดตึงและปวดเมื่อยตามร่างกาย</icon p>
+							<div class="icon fastBk"> <!-- fast booking -->
+								<button type="button" class="fastBkBtn btn btn-primary ">
+								<i class="far fa-address-book"></i>	
+								จองทันที
+								</button>
+							</div>
 	        </div>
 	        <!-- /.col-md-4 -->
 	      </div>
@@ -66,10 +70,10 @@
 	      </div>
 	      <!-- Content Row -->
 	      <div class="row">
-	      	<?php for($i = 0;$i<3;$i++){?>
+	      	<?php for($i = 0;$i<2;$i++){?>
 	        <div class="col-md-4 mb-4">
-	          <div class="card h-100">
-	          	<img class="card-img-top img-height-150" src="src/assets/images/thai-massage1.jpg">
+	          <div class="card">
+	          	<img class="card-img-top" src="src/assets/images/thai-massage1.jpg">
 	            <div class="card-body my-card">
 	              <h4 class="card-title">นวดออยล์ อโรมา</h4>
 	              <p class="card-text">การนวดน้ำมันอโรมาที่สดชื่นจากน้ำมันหอมระเหยที่จะทำให้คุณรู้สึกผ่อนคลายเพื่อเริ่มต้นและสิ้นสุดวันใหม่ของคุณ
@@ -87,8 +91,8 @@
 
 	        <!-- /.col-md-4 -->
 	        <div class="col-md-4 mb-4">
-	          <div class="card h-100">
-	          	<img class="card-img-top img-height-150" src="src/assets/images/foot-massage1.jpg">
+	          <div class="card">
+	          	<img class="card-img-top" src="src/assets/images/foot-massage1.jpg">
 	            <div class="card-body my-card">
 	              <h4 class="card-title">นวดเท้า</h4>
 	              <p class="card-text">
@@ -106,8 +110,8 @@
 	        </div>
 	        <!-- /.col-md-4 -->
 	        <div class="col-md-4 mb-4">
-	          <div class="card h-100">
-	          	<img class="card-img-top img-height-150" src="src/assets/images/thai-massage4.jpg">
+	          <div class="card">
+	          	<img class="card-img-top" src="src/assets/images/thai-massage4.jpg">
 	            <div class="card-body my-card">
 	              <h4 class="card-title">นวดแผนไทย</h4>
 	              <p class="card-text">
