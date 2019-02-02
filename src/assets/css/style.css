@@ -60,3 +60,37 @@ body{
 	height: 60px;
 	background-color: var(--brown-color-base);
 }
+.carousel_c{
+	width: 100%;
+  	height: auto;
+}
+.footerpage{
+	padding-top: 60px;
+}
+.h2Topic{
+	text-align: center;
+	margin-top: 20px;
+}
+
+.underline_c{
+	border:3px solid pink;
+	width:530px;
+}
+.underline_c_sub{
+	border:3px solid pink;
+	width:330px;
+	margin-left: -1px;
+}
+.story{
+	margin-top: 5%;
+}
+.img_c{
+	border-radius: 50%;
+	margin-top:20%;
+}
+.r1{
+	margin-left: 70px;
+}
+.btnChoose{
+	margin-left: 100px;
+}
