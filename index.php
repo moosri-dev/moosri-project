@@ -52,10 +52,10 @@
 	        <!-- /.col-lg-8 -->
 	        <div class="col-lg-4">
 	          		<h3>หมู่ 4 นวดแผนไทย</h3>
-								<p>การนวดที่เป็นเอกลักษณ์ของเราพร้อมด้วยเทคนิคหลากหลายที่ได้รับแรงบันดาลใจจากการนวดแบบเอเชียที่เป็นที่นิยม เหมาะสำหรับบรรเทาความตึงเครียดตึงและปวดเมื่อยตามร่างกาย</icon p>
-							<div class="icon fastBk"> <!-- fast booking -->
-								<button type="button" class="fastBkBtn btn btn-primary ">
-								<i class="far fa-address-book"></i>	
+								<p>การนวดที่เป็นเอกลักษณ์ของเราพร้อมด้วยเทคนิคหลากหลายที่ได้รับแรงบันดาลใจจากการนวดแบบเอเชียที่เป็นที่นิยม เหมาะสำหรับบรรเทาความตึงเครียดตึงและปวดเมื่อยตามร่างกาย</p>
+							<div class="fastBk"> <!-- fast booking -->
+								<button type="button" class="fastBkBtn btn btn-primary">
+								<i class="far fa-address-book spinner-grow text-danger"></i>	
 								จองทันที
 								</button>
 							</div>
