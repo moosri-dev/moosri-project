@@ -38,7 +38,6 @@
             }
             $mysqli->close();
 
-           
             exit(0);
         }
     ?>
