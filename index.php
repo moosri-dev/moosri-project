@@ -10,6 +10,7 @@
 <body>
 <div class="header">
     <?php include("src/components/header.php"); ?>
+    <?php include("src/components/banner.php"); ?>
 </div>
 <div class="content">
     <div class="body_c">

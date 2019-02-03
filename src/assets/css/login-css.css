@@ -1,0 +1,35 @@
+.wrap-login100 {
+    margin: 10% 0% 0% 6%;
+    width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.login100-form-title {
+    display: block;
+    font-family: OpenSans-Regular;
+    font-size: 30px;
+    color: #555555;
+    line-height: 1.2;
+    text-align: center;
+    margin-top:10%;
+}
+.wrap-input100{
+    width:60%;
+    margin-left:20%;
+    margin-top:10%;
+}
+.container-login100-form-btn{
+    margin:5% 0% 5% 40%;
+}
+.p-b-4{
+    margin-bottom: 7%;
+}
+.card_c{
+    margin: 5% 0% 21% 10%;
+}
