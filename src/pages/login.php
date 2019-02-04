@@ -1,3 +1,25 @@
+<?php
+session_start();
+include ("../config/connect-db.php");
+$rs ="XXX";
+$result= "wait";
+if(isset($_POST['save'])){
+    $user = $_POST['username'];
+    $pwd = $_POST['pass'];
+
+    $sql = "";
+    if($result=$mysqli->query("select * from hm_user where user_user = '$user' and user_pass = '$pwd'")){
+        while ($a = $result->fetch_object()) {
+            $_SESSION['user_id'] = $a->user_id;
+        }
+    }else{
+        echo "No";
+        // session_destroy();
+        // exit();
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,39 +43,40 @@
                 <img class="card-img-top" src="../assets/images/thai-massage3.jpg" alt="Card image cap">
             </div>
             <div class="col-md-6">
-            <form action="#" method="post" id="frmLogin">
-                <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-                    <form class="login100-form validate-form">
-                        <span class="login100-form-title p-b-33">
-                            เข้าสู่ระบบ
-                        </span>
-                        <div class="wrap-input100 validate-input">
-                            <input autocomplete="false" class="form-control" type="text" name="username"
-                                placeholder="ชื่อผู้ใช้งาน">
-                            <span class="focus-input100-1"></span>
-                            <span class="focus-input100-2"></span>
-                        </div>
-                        <div class="wrap-input100 validate-input">
-                            <input class="form-control" type="password" name="pass" placeholder="รหัสผ่าน">
-                            <span class="focus-input100-1"></span>
-                            <span class="focus-input100-2"></span>
-                        </div>
-                        <div class="container-login100-form-btn m-t-20">
-                            <button class="login100-form-btn btn btn-primary" type="submit">
+                <form action="login.php" method="post" id="frmLogin">
+                    <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+                        <form class="login100-form validate-form">
+                            <span class="login100-form-title p-b-33">
                                 เข้าสู่ระบบ
-                            </button>
-                        </div>
-                        <div class="text-center p-t-45 p-b-4">
-                            <span class="txt1">
-                                ลืมรหัสผ่าน
+                                <?=$_SESSION['user_id']; ?>
                             </span>
-                            <a href="#" class="txt2 hov1">
-                                ชื่อผู้ใช้งาน / รหัสผ่าน?
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </form>
+                            <div class="wrap-input100 validate-input">
+                                <input autocomplete="false" class="form-control" type="text" name="username"
+                                    placeholder="ชื่อผู้ใช้งาน">
+                                <span class="focus-input100-1"></span>
+                                <span class="focus-input100-2"></span>
+                            </div>
+                            <div class="wrap-input100 validate-input">
+                                <input class="form-control" type="password" name="pass" placeholder="รหัสผ่าน">
+                                <span class="focus-input100-1"></span>
+                                <span class="focus-input100-2"></span>
+                            </div>
+                            <div class="container-login100-form-btn m-t-20">
+                                <button class="login100-form-btn btn btn-primary" type="submit" name="save">
+                                    เข้าสู่ระบบ
+                                </button>
+                            </div>
+                            <div class="text-center p-t-45 p-b-4">
+                                <span class="txt1">
+                                    ลืมรหัสผ่าน
+                                </span>
+                                <a href="#" class="txt2 hov1">
+                                    ชื่อผู้ใช้งาน / รหัสผ่าน?
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -65,10 +88,8 @@
 <!-- Script -->
 <script src="../assets/Js/header.js"></script>
 <script src="../assets/Js/login.js"></script>
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
 </script>
