@@ -13,45 +13,17 @@
         include('../components/global-variable.php');
         include('../assets/scripts/admin-script.php');
         echo '<title>'.$title.'</title>';
-
-        if(isset($_POST['save'])){
-            include('../config/connect-db.php');
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $name = $_POST['name'];
-            $tel = $_POST['tel'];
-            $email = $_POST['email'];
-            $line = $_POST['line'];
-            $address = $_POST['address'];
-            $profile = $_POST['profile'];
-            $status = $_POST['status'];
-
-            $sql = "INSERT INTO 
-            hm_user(username,password,name,tel,email,line,address,image,status_id) 
-            VALUES(?,?,?,?,?,?,?,?,?)";
-
-            /* create a prepared statement */
-            if($stmt = $mysqli->prepare($sql)){
-
-                /* bind parameters for markers */
-                $stmt->bind_param('ssssssssi',$username,$password,$name,$tel,$email,$line,$address,$profile,$status);
-                
-                /* execute query */
-                $stmt->execute();
-
-                /* close statement */
-                $stmt->close();
-                
-                echo "Insert data success!";
-                header('location: admin-management.php');
-            }else{
-                echo "Error:".$sql."<br>".$mysqli->error;
-                // header('refresh:2;');
-            }
-            $mysqli->close();
-
-            exit(0);
-        }
+       
+        include('../config/connect-db.php');
+        $sql= 'SELECT u.id, u.username,u.password,u.name,u.tel,u.email,u.line,u.address,u.image,u.status_id
+            FROM hm_user u
+            WHERE u.id =?';
+        if($stmt = $mysqli->prepare($sql)){
+            $userId = $_GET['id'];
+            $stmt->bind_param('i',$userId);
+            $stmt->execute();
+            $result  = $stmt->get_result();
+            while($rs=$result->fetch_object()){
     ?>
 
 <!-- DataTables JavaScript -->
@@ -84,17 +56,18 @@
             <div class="col-md-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            เพิ่มข้อมูลผู้ใช้งาน
+                            แก้ไขข้อมูลผู้ใช้งาน
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post">
+                            <form method="post" action="pages/update-user.php">
                                 <div class="form-group row">
+                                    <input type="text" name="userId"  value='<?php echo $rs->id ?>' hidden/>
                                     <div class="col-md-4 text-right">
                                         <label for="inputUsername">ชื่อผู้ใช้งาน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="username" class="form-control" placeholder='ชื่อผู้ใช้งาน' maxlength='50' required/>
+                                        <input type="text" name="username" class="form-control" placeholder='ชื่อผู้ใช้งาน' maxlength='50' value='<?php echo $rs->username ?>' required/>
                                     </div>
                                 </div>
 
@@ -103,7 +76,7 @@
                                         <label for="inputPassword">รหัสผ่าน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="password" name="password" class="form-control" placeholder='รหัสผ่าน' maxlength='50' required/>
+                                        <input type="password" name="password" class="form-control" placeholder='รหัสผ่าน' maxlength='50' value='<?php echo $rs->password ?>' required/>
                                     </div>
                                 </div>
 
@@ -112,7 +85,7 @@
                                         <label for="comfirmPassword">ยืนยันรหัสผ่าน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="password" class="form-control" placeholder='ยืนยันรหัสผ่าน' maxlength='50' required/>
+                                        <input type="password" class="form-control" placeholder='ยืนยันรหัสผ่าน' maxlength='50' value='<?php echo $rs->password ?>' required/>
                                     </div>
                                 </div>
 
@@ -121,7 +94,7 @@
                                         <label for="name">ชื่อ-นามสกุล<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="name" class="form-control" placeholder='ชื่อ-นามสกุล' maxlength='50' required/>
+                                        <input type="text" name="name" class="form-control" placeholder='ชื่อ-นามสกุล' maxlength='50' value='<?php echo $rs->name ?>' required/>
                                     </div>
                                 </div>
 
@@ -130,7 +103,7 @@
                                         <label for="tel">เบอร์โทร<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="tel" class="form-control" placeholder='เบอร์โทร' maxlength='10' required/>
+                                        <input type="text" name="tel" class="form-control" placeholder='เบอร์โทร' maxlength='10' value='<?php echo $rs->tel ?>' required/>
                                     </div>
                                 </div>
 
@@ -139,7 +112,7 @@
                                         <label for="email">อีเมล์<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="email" class="form-control" placeholder='อีเมล์' maxlength='50' required/>
+                                        <input type="text" name="email" class="form-control" placeholder='อีเมล์' maxlength='50' value='<?php echo $rs->email ?>' required/>
                                     </div>
                                 </div>
 
@@ -148,7 +121,7 @@
                                         <label for="email">ไลน์ไอดี<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="line" class="form-control" placeholder='ไลน์ไอดี' maxlength='50' required/>
+                                        <input type="text" name="line" class="form-control" placeholder='ไลน์ไอดี' maxlength='50' value='<?php echo $rs->line ?>' required/>
                                     </div>
                                 </div>
 
@@ -157,7 +130,7 @@
                                         <label for="address">ที่อยู่ :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <textarea name="address"rows="3" class="form-control" placeholder='ที่อยู่'></textarea>
+                                        <textarea name="address"rows="3" class="form-control" placeholder='ที่อยู่'><?php echo $rs->address ?></textarea>
                                     </div>
                                 </div>
 
@@ -167,10 +140,10 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="profile" id="my-file" type="file">
+                                            <input class="input-file" name="profile" id="my-file" type="file" value="<?php echo $rs->image ?>">
                                             <label tabindex="0" for="my-file" class="input-file-trigger">เลือกไฟล์</label>
                                         </div>
-                                        <p class="file-return"></p>
+                                        <p class="file-return" ></p>
                                     </div>
                                 </div>
 
@@ -181,14 +154,14 @@
                                     <div class="col-md-8">
                                         <select name="status" id="" class="form-control" required>
                                             <option value="">เลือกสถานผู้ใช้งาน</option>
-                                            <option value="1">ผู้ดูแลระบบ</option>
-                                            <option value="2">หมอนวด</option>
+                                            <option value="1" <?php echo($rs->status_id == 1?'selected="selected"':'')?>>ผู้ดูแลระบบ</option>
+                                            <option value="2"<?php echo($rs->status_id == 2?'selected="selected"':'')?>>หมอนวด</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-lg btn-block btn-primary" name="save">บันทึกข้อมูล</button>
+                                        <button type="submit" class="btn btn-lg btn-block btn-primary" name="update">บันทึกข้อมูล</button>
                                     </div>
                                 </div>
                             </form>
@@ -205,7 +178,12 @@
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
-
+    <?php
+            }
+            $stmt->close();
+        }
+        $mysqli->close();
+    ?>
     <script type="text/javascript">
         document.querySelector("html").classList.add('js');
         var fileInput  = document.querySelector( ".input-file" ),  
