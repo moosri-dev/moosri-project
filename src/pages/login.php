@@ -16,6 +16,7 @@ if (isset($_POST['save'])) {
             $_SESSION['user_tel'] = $a->user_tel;
             $_SESSION['user_email'] = $a->user_email;
             $_SESSION['user_line'] = $a->user_line;
+            $_SESSION['user_address'] = $a->user_address;
         }
         if ($_SESSION['status_id'] == '1') { //admin
             header('location:../../src/pages/admin.php');

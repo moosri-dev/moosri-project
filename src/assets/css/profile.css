@@ -1,5 +1,5 @@
 .wrap-login100 {
-    margin: 5% 0% 0% 6%;
+    margin: 5% 0% 0% 0%;
     width: 550px;
     background: #fff;
     border-radius: 10px;
@@ -22,7 +22,7 @@
 .wrap-input100{
     width:60%;
     margin-left:20%;
-    margin-top:10%;
+    margin-top:3%;
 }
 .container-login100-form-btn{
     margin:5% 0% 5% 40%;
