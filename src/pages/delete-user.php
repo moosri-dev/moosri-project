@@ -2,7 +2,7 @@
     include('../config/connect-db.php');
     
     $userId = $_POST['userId'];
-    $sql = "DELETE FROM hm_user WHERE id = ?";
+    $sql = "DELETE FROM hm_user WHERE user_id = ?";
    
     /* create a prepared statement */
     if($stmt = $mysqli->prepare($sql)){

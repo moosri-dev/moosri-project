@@ -15,9 +15,11 @@
         echo '<title>'.$title.'</title>';
        
         include('../config/connect-db.php');
-        $sql= 'SELECT u.id, u.username,u.password,u.name,u.tel,u.email,u.line,u.address,u.image,u.status_id
+        $sql= 'SELECT u.user_id as id, u.user_user as username,u.user_pass as password
+            ,u.user_name as name,u.user_tel as tel,u.user_email as email,u.user_line as line
+            ,u.user_address as address,u.user_img as image,u.status_id
             FROM hm_user u
-            WHERE u.id =?';
+            WHERE u.user_id =?';
         if($stmt = $mysqli->prepare($sql)){
             $userId = $_GET['id'];
             $stmt->bind_param('i',$userId);

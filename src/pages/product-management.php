@@ -71,50 +71,43 @@
                             <table width="100%" class="table table-striped table-bordered table-hover" id="myTable">
                                 <thead>
                                     <tr>
-                                        <th>ลำดับที่</th>
-                                        <th>ชื่อผู้ใช้งาน</th>
-                                        <th>ชื่อ-นามสกุล</th>
-                                        <th>เบอร์โทร</th>
-                                        <th>อีเมล์</th>
-                                        <th>ไลน์</th>
-                                        <th>ที่อยู่</th>
-                                        <th>สถานะ</th>
-                                        <th>แก้ไขข้อมูล</th>
-                                        <th>ลบข้อมูล</th>
+                                        <th class="text-center">ลำดับที่</th>
+                                        <th class="text-center">ชื่อสินค้า</th>
+                                        <th class="text-center">รายละเอียดสินค้า</th>
+                                        <th class="text-center">ราคา/หน่วย</th>
+                                        <th class="text-center">จำนวน</th>
+                                        <th class="text-center">แก้ไขข้อมูล</th>
+                                        <th class="text-center">ลบข้อมูล</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                   <?php
                                     include('../config/connect-db.php');
-                                    $status_id = 2;
-                                    $sql= 'SELECT 
-                                                u.user_id as id, u.user_user as username,u.user_name as name,u.user_tel as tel
-                                                ,u.user_email as email,u.user_line as line,u.user_address as address
-                                                ,s.status_name
-                                            FROM hm_user u INNER JOIN hm_status s ON u.status_id = s.status_id
-                                            WHERE u.status_id =?';
+                                    $sql= 'SELECT product_id as pid, product_name as pname
+                                                , product_detail as detail, product_price as price
+                                                , product_unit as unit, product_img as image 
+                                            FROM hm_product'; 
 
                                     if($stmt = $mysqli->prepare($sql)){
-                                        $stmt->bind_param('i',$status_id);
                                         $stmt->execute();
                                         $result  = $stmt->get_result();
                                         $rows = 1;
+                                        
                                         while($rs=$result->fetch_object()){
                                             echo '<tr>';
                                             echo '<td class="text-center">'.$rows.'</td>';
-                                            echo '<td>'.$rs->username.'</td>';
-                                            echo '<td>'.$rs->name.'</td>';
-                                            echo '<td>'.$rs->tel.'</td>';
-                                            echo '<td>'.$rs->email.'</td>';
-                                            echo '<td>'.$rs->line.'</td>';
-                                            echo '<td>'.$rs->address.'</td>';
-                                            echo '<td>'.$rs->status_name.'</td>';
-                                            echo '<td class="text-center" onclick="editUser('.$rs->id.')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></td>';
-                                            echo '<td class="text-center" onclick="deleteUser('.$rs->id.','."'$rs->username'".')"><i class="fa fa-ban" aria-hidden="true"></i></td>';
+                                            echo '<td>'.$rs->pname.'</td>';
+                                            echo '<td>'.$rs->detail.'</td>';
+                                            echo '<td class="text-right">'.$rs->price.'</td>';
+                                            echo '<td class="text-right">'.$rs->unit.'</td>';
+                                            echo '<td class="text-center" onclick="editUser('.$rs->pid.')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></td>';
+                                            echo '<td class="text-center" onclick="deleteUser('.$rs->pid.','."'$rs->pname'".')"><i class="fa fa-ban" aria-hidden="true"></i></td>';
                                             echo '</tr>';
                                             $rows++;
                                         }
                                         $stmt->close();
+                                    }else{
+                                        echo "ERROR: SQL Excute Error.".$sql."<br>".$mysqli->error;
                                     }
                                     $mysqli->close();
                                   ?>

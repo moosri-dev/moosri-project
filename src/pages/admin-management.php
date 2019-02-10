@@ -87,15 +87,19 @@
                                   <?php
                                     include('../config/connect-db.php');
                                     $status_id = 1;
-                                    $sql= 'SELECT u.id, u.username,u.name,u.tel,u.email,u.line,u.address,s.status_name
-                                        FROM hm_user u INNER JOIN hm_status s ON u.status_id = s.status_id
-                                        WHERE u.status_id =?';
+                                    $sql= 'SELECT 
+                                                u.user_id as id, u.user_user as username,u.user_name as name,u.user_tel as tel
+                                                ,u.user_email as email,u.user_line as line,u.user_address as address
+                                                ,s.status_name
+                                            FROM hm_user u INNER JOIN hm_status s ON u.status_id = s.status_id
+                                            WHERE u.status_id =?';
 
                                     if($stmt = $mysqli->prepare($sql)){
                                         $stmt->bind_param('i',$status_id);
                                         $stmt->execute();
                                         $result  = $stmt->get_result();
                                         $rows = 1;
+                                        
                                         while($rs=$result->fetch_object()){
                                             echo '<tr>';
                                             echo '<td class="text-center">'.$rows.'</td>';
@@ -112,6 +116,8 @@
                                             $rows++;
                                         }
                                         $stmt->close();
+                                    }else{
+                                        echo "ERROR: SQL Excute Error.".$sql."<br>".$mysqli->error;
                                     }
                                     $mysqli->close();
                                   ?>

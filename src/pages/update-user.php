@@ -12,8 +12,8 @@
         $profile = $_POST['profile'];
         $status = $_POST['status'];
         $sql = "UPDATE hm_user 
-        SET username=?,password=?,name=?,tel=?,email=?,line=?,address=?,image=?,status_id=? 
-        WHERE id=?";
+        SET user_user=?,user_pass=?,user_name=?,user_tel=?,user_email=?,user_line=?,user_address=?,user_img=?,status_id=? 
+        WHERE user_id=?";
 
         /* create a prepared statement */
         if($stmt = $mysqli->prepare($sql)){

@@ -27,7 +27,7 @@
             $status = $_POST['status'];
 
             $sql = "INSERT INTO 
-            hm_user(username,password,name,tel,email,line,address,image,status_id) 
+            hm_user(user_user,user_pass,user_name,user_tel,user_email,user_line,user_address,user_img,status_id) 
             VALUES(?,?,?,?,?,?,?,?,?)";
 
             /* create a prepared statement */
@@ -46,7 +46,7 @@
                 header('location: admin-management.php');
             }else{
                 echo "Error:".$sql."<br>".$mysqli->error;
-                // header('refresh:2;');
+                header('refresh:2;');
             }
             $mysqli->close();
 
@@ -59,12 +59,21 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                responsive: true
-            });
-        });
+     <script type="text/javascript">
+        function validate(){
+                let password =document.getElementById("password").value;
+                let confirmPassword =document.getElementById("confirmPassword").value;
+                let saveBtn = document.getElementById("save");
+                if(confirmPassword != ""){
+                    if(password != confirmPassword) {
+                        document.getElementById("wrong").style.display = "block";
+                        saveBtn.disabled = true;
+                    }else{
+                        document.getElementById("wrong").style.display = "none";
+                        saveBtn.disabled = false;
+                    }
+                }
+            };
     </script>
 
 </head>
@@ -103,16 +112,17 @@
                                         <label for="inputPassword">รหัสผ่าน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="password" name="password" class="form-control" placeholder='รหัสผ่าน' maxlength='50' required/>
+                                        <input type="password" id="password" name="password" class="form-control" placeholder='รหัสผ่าน' maxlength='50' onkeyup="validate();" required/>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
-                                        <label for="comfirmPassword">ยืนยันรหัสผ่าน<span class="required">*</span> :</label>
+                                        <label for="inputConfirmPassword">ยืนยันรหัสผ่าน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="password" class="form-control" placeholder='ยืนยันรหัสผ่าน' maxlength='50' required/>
+                                        <div id="wrong" style="color:red;font-weight:bold;" hidden>ยืนยันรหัสผ่านไม่ถูกต้อง!</div>
+                                        <input type="password" id="confirmPassword" class="form-control" placeholder='ยืนยันรหัสผ่าน' maxlength='50' onkeyup="validate();" required/>
                                     </div>
                                 </div>
 
@@ -188,7 +198,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-lg btn-block btn-primary" name="save">บันทึกข้อมูล</button>
+                                        <button type="submit" class="btn btn-lg btn-block btn-primary" id="save" name="save">บันทึกข้อมูล</button>
                                     </div>
                                 </div>
                             </form>
