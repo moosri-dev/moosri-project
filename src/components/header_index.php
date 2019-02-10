@@ -7,7 +7,7 @@
 <div>
     <div>
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color:pink">
-            <a class="navbar-brand" href="../../">แนวแผน ไทยหมู่สี</a>
+            <a class="navbar-brand" href="#">แนวแผน ไทยหมู่สี</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@
                             <a class="dropdown-item" href="#"><i class="fab fa-product-hunt"></i>&nbsp;ข้อมูลสินค้า</a>
                             <a class="dropdown-item" href="#"><i class="fas fa-list-ol"></i>&nbsp;รายการนวด/คิวนวด</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="../../src/config/logout.php"><i class="fas fa-sign-out-alt"></i>&nbsp;ออกจากระบบ</a>
+                            <a class="dropdown-item" href="src/config/logout.php"><i class="fas fa-sign-out-alt"></i>&nbsp;ออกจากระบบ</a>
                         </div>
                     </li>
                 </ul>

@@ -1,21 +1,27 @@
 <?php
-session_start();
-include ("../config/connect-db.php");
-$rs ="XXX";
-$result= "wait";
-if(isset($_POST['save'])){
+if (!isset($_SESSION)) {
+    session_start();
+}
+include "../config/connect-db.php";
+if (isset($_POST['save'])) {
     $user = $_POST['username'];
     $pwd = $_POST['pass'];
 
     $sql = "";
-    if($result=$mysqli->query("select * from hm_user where user_user = '$user' and user_pass = '$pwd'")){
+    if ($result = $mysqli->query("select * from hm_user where user_user = '$user' and user_pass = '$pwd'")) {
         while ($a = $result->fetch_object()) {
+            $_SESSION['status_id'] = $a->status_id;
             $_SESSION['user_id'] = $a->user_id;
+            $_SESSION['user_name'] = $a->user_name;
+            $_SESSION['user_tel'] = $a->user_tel;
+            $_SESSION['user_email'] = $a->user_email;
+            $_SESSION['user_line'] = $a->user_line;
         }
-    }else{
-        echo "No";
-        // session_destroy();
-        // exit();
+        if ($_SESSION['status_id'] == '1') { //admin
+            header('location:../../src/pages/admin.php');
+        } else { //member
+            header('location:../../');
+        }
     }
 }
 
@@ -35,7 +41,7 @@ if(isset($_POST['save'])){
 
 <body>
     <div class="header">
-        <?php include("../components/header.php"); ?>
+        <?php include "../components/header.php";?>
     </div>
     <div class="content">
         <div class="row body_c">
@@ -48,7 +54,6 @@ if(isset($_POST['save'])){
                         <form class="login100-form validate-form">
                             <span class="login100-form-title p-b-33">
                                 เข้าสู่ระบบ
-                                <?=$_SESSION['user_id']; ?>
                             </span>
                             <div class="wrap-input100 validate-input">
                                 <input autocomplete="false" class="form-control" type="text" name="username"
@@ -81,7 +86,7 @@ if(isset($_POST['save'])){
         </div>
     </div>
     <div class="footer">
-        <?php include("../components/footer.php"); ?>
+        <?php include "../components/footer.php";?>
     </div>
 </body>
 
