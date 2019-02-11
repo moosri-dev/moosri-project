@@ -27,8 +27,8 @@ include ("../config/connect-db.php");
             <div class="col-md-4 card_c card" style="width: 18rem;">
                 <div class="row">
                     <div class="imame-user" style="margin:10px 10px 10px 10px;">
-                        <img class="img-profile img-circle img-responsive center-block"
-                            src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="">
+                    <img class="img-profile img-circle img-responsive center-block"
+                                src="<?=$_SESSION['user_img']?>" alt="profile" width="200" height="200">
                         <div class="form-group">
                             <label for="exampleFormControlFile1">แก้ไขรูปภาพ</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1">
