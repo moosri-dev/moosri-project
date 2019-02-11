@@ -149,7 +149,7 @@
                                         <label for="email">อีเมล์<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="email" class="form-control" placeholder='อีเมล์' maxlength='50' required/>
+                                        <input type="text" name="email" class="form-control" placeholder='อีเมล์' maxlength='50' pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" required/>
                                     </div>
                                 </div>
 

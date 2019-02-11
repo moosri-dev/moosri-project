@@ -30,20 +30,20 @@
             });
         });
 
-        function deleteUser(id,username){
-            if(confirm("ยืนยันการลบข้อมูลผู้ใช้: "+username)){
-                $.post('pages/delete-user.php','userId='+id,function(response){
+        function deleteUser(pid,pname){
+            if(confirm("ยืนยันการลบข้อมูลสินค้า: "+pname)){
+                $.post('pages/delete-product.php','pid='+pid,function(response){
                if(response){
-                alert("Delete User Success.");
+                alert("Delete Product Success.");
                 location.reload();
                }else{
-                   alert('Delete User Failed.');
+                   alert('Delete Product Failed.');
                 }
              });
             }
         }
-        function editUser(id){
-            let url = "pages/edit-user.php?id="+id;
+        function editUser(pid){
+            let url = "pages/edit-product.php?pid="+pid;
             window.location.href = url;
         }
     </script>
@@ -56,7 +56,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">จัดการข้อมูลผู้ใช้งาน</h1>
+                    <h1 class="page-header">จัดการข้อมูลสินค้า</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -64,7 +64,7 @@
             <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            ตารางข้อมูลเจ้าหน้าที่ดูแลระบบ
+                            ตารางข้อมูลสินค้า
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -76,6 +76,7 @@
                                         <th class="text-center">รายละเอียดสินค้า</th>
                                         <th class="text-center">ราคา/หน่วย</th>
                                         <th class="text-center">จำนวน</th>
+                                        <th class="text-center">ชื่อผู้นำเข้าสินค้า</th>
                                         <th class="text-center">แก้ไขข้อมูล</th>
                                         <th class="text-center">ลบข้อมูล</th>
                                     </tr>
@@ -83,10 +84,11 @@
                                 <tbody>
                                   <?php
                                     include('../config/connect-db.php');
-                                    $sql= 'SELECT product_id as pid, product_name as pname
-                                                , product_detail as detail, product_price as price
-                                                , product_unit as unit, product_img as image 
-                                            FROM hm_product'; 
+                                    $sql= 'SELECT p.product_id as pid, p.product_name as pname
+                                                , p.product_detail as detail, p.product_price as price
+                                                , p.product_unit as unit, p.product_img as image
+                                                , u.user_name as username
+                                            FROM hm_product p INNER JOIN hm_user u ON p.user_id = u.user_id'; 
 
                                     if($stmt = $mysqli->prepare($sql)){
                                         $stmt->execute();
@@ -96,10 +98,11 @@
                                         while($rs=$result->fetch_object()){
                                             echo '<tr>';
                                             echo '<td class="text-center">'.$rows.'</td>';
-                                            echo '<td>'.$rs->pname.'</td>';
-                                            echo '<td>'.$rs->detail.'</td>';
+                                            echo '<td class="text-center">'.$rs->pname.'</td>';
+                                            echo '<td class="text-center">'.$rs->detail.'</td>';
                                             echo '<td class="text-right">'.$rs->price.'</td>';
                                             echo '<td class="text-right">'.$rs->unit.'</td>';
+                                            echo '<td class="text-center">'.$rs->username.'</td>';
                                             echo '<td class="text-center" onclick="editUser('.$rs->pid.')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></td>';
                                             echo '<td class="text-center" onclick="deleteUser('.$rs->pid.','."'$rs->pname'".')"><i class="fa fa-ban" aria-hidden="true"></i></td>';
                                             echo '</tr>';

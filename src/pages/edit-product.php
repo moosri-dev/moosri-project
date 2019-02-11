@@ -20,41 +20,22 @@
         include('../assets/scripts/admin-script.php');
         echo '<title>'.$title.'</title>';
 
-        if(isset($_POST['save'])){
             include('../config/connect-db.php');
-            $pname = $_POST['pname'];
-            $price = $_POST['price'];
-            $unit = $_POST['unit'];
-            $image = $_POST['image'];
-            $detail = $_POST['detail'];
-            $user_id = $_SESSION['user_id'];
-            $sql = "INSERT INTO 
-            hm_product(product_name,product_detail,product_price,product_unit,product_img,user_id) 
-            VALUES(?,?,?,?,?,?)";
-
+           
+            $sql = "SELECT product_name as pname, product_detail as detail
+            , product_price as price, product_unit as unit, product_img as image 
+             FROM hm_product 
+             WHERE product_id = ?";
             /* create a prepared statement */
             if($stmt = $mysqli->prepare($sql)){
-
                 /* bind parameters for markers */
-                $stmt->bind_param('ssiisi',$pname,$detail,$price,$unit,$image,$user_id);
-                
+                $pid = $_GET['pid'];
+                $stmt->bind_param('i',$pid);
                 /* execute query */
                 $stmt->execute();
-
                 /* close statement */
-                $stmt->close();
-                
-                echo "Insert data success!";
-                echo $sql;
-                header('location: product-management.php');
-            }else{
-                echo "Error:".$sql."<br>".$mysqli->error;
-                header('refresh:2;');
-            }
-            $mysqli->close();
-
-            exit(0);
-        }
+                $result  = $stmt->get_result();
+                while($rs=$result->fetch_object()){
     ?>
 
 <!-- DataTables JavaScript -->
@@ -87,17 +68,18 @@
             <div class="col-md-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            เพิ่มข้อมูลสินค้า
+                            แก้ไขข้อมูลสินค้า
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post">
+                            <form method="post" action="pages/update-product.php">
+                                <input type="text" name="pid"  value='<?php echo $pid ?>' hidden/>
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
                                         <label for="inputPname">ชื่อสินค้า<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="pname" class="form-control" placeholder='ชื่อสินค้า' maxlength='50' required/>
+                                        <input type="text" name="pname" class="form-control" placeholder='ชื่อสินค้า' maxlength='50' <?php echo("value =".$rs->pname);?> required/>
                                     </div>
                                 </div>
 
@@ -106,7 +88,7 @@
                                         <label for="inputPrice">ราคา<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="number" name="price" class="form-control" placeholder='ราคาต่อหน่วย' maxlength='50' required/>
+                                        <input type="number" name="price" class="form-control" placeholder='ราคาต่อหน่วย' maxlength='50' <?php echo("value =".$rs->price);?> required/>
                                     </div>
                                 </div>
 
@@ -115,7 +97,7 @@
                                         <label for="unit">จำนวน<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="number" name="unit" class="form-control" placeholder='จำนวน' maxlength='50' required/>
+                                        <input type="number" name="unit" class="form-control" placeholder='จำนวน' maxlength='50' <?php echo("value =".$rs->unit);?> required/>
                                     </div>
                                 </div>
 
@@ -125,7 +107,7 @@
                                         <label for="detail">รายละเอียด :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <textarea name="detail"rows="3" class="form-control" placeholder='รายละเอียดสินค้า'></textarea>
+                                        <textarea name="detail"rows="3" class="form-control" placeholder='รายละเอียดสินค้า'><?php echo($rs->detail);?></textarea>
                                     </div>
                                 </div>
 
@@ -135,15 +117,15 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="image" id="my-file" type="file">
-                                            <label tabindex="0" for="my-file" class="input-file-trigger">เลือกไฟล์</label>
+                                            <input class="input-file" name="image" id="my-file" type="file" <?php echo("value =".$rs->image);?>>
+                                            <label tabindex="0" for="my-file" class="input-file-trigger ">เลือกไฟล์</label>
                                         </div>
-                                        <p class="file-return"></p>
+                                        <p class="file-return"><?php echo($rs->image);?></p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-lg btn-block btn-primary" name="save">บันทึกข้อมูล</button>
+                                        <button type="submit" class="btn btn-lg btn-block btn-primary" name="update">บันทึกข้อมูล</button>
                                     </div>
                                 </div>
                             </form>
@@ -160,7 +142,15 @@
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
-
+    <?php 
+            }$stmt->close();
+        }else{
+            echo "Error:".$sql."<br>".$mysqli->error;
+            header('refresh:2;');
+        }
+        $mysqli->close();
+        exit(0);
+    ?>
     <script type="text/javascript">
         document.querySelector("html").classList.add('js');
         var fileInput  = document.querySelector( ".input-file" ),  

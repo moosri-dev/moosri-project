@@ -135,6 +135,9 @@
                         </ul>
                     <!-- /.nav-second-level -->
                 </li>
+                <li>
+                    <a href="pages/purchases-history.php"><i class="fa fa-bar-chart-o fa-fw"></i>ประวัติข้อมูลการขายสินค้า</a>
+                </li>
             </ul>
         </div>
         <!-- /.sidebar-collapse -->
