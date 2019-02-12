@@ -39,7 +39,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="profile.php"><i class="fas fa-user"></i>&nbsp;ข้อมูลส่วนตัว</a>
                             <a class="dropdown-item" href="#"><i class="fab fa-product-hunt"></i>&nbsp;ข้อมูลสินค้า</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-list-ol"></i>&nbsp;รายการนวด/คิวนวด</a>
+                            <a class="dropdown-item" href="booking.php"><i class="fas fa-list-ol"></i>&nbsp;รายการนวด/จองคิวนวด</a>
                             <a class="dropdown-item" href="search.php"><i class="fas fa-search"></i>&nbsp;ค้นหาหมอนวด</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="../../src/config/logout.php"><i class="fas fa-sign-out-alt"></i>&nbsp;ออกจากระบบ</a>

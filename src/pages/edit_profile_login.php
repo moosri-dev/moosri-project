@@ -1,9 +1,38 @@
 <?php
- if(!isset($_SESSION)) 
- { 
-     session_start(); 
- } 
-include ("../config/connect-db.php");
+if (!isset($_SESSION)) {session_start();}
+include "../config/connect-db.php";
+
+if (isset($_POST['save'])) {
+    $username = $_POST['username'];
+    $pwdOld = $_POST['pwdOld'];
+    $pwdNew = $_POST['pwdNew'];
+    $pwdReNew = $_POST['pwdReNew'];
+
+    //Select
+    if ($stmtSel = $mysqli->prepare("SELECT * FROM hm_user WHERE user_id = ?")) {
+        $stmtSel->bind_param('i', $_SESSION['user_id']);
+        $stmtSel->execute();
+        $result = $stmtSel->get_result();
+        if ($result->num_rows === 0) {
+            echo "<script type='text/javascript'>alert('have\'t User') </script>";
+        } else {
+            $rs=$result->fetch_assoc();
+            //Update
+            if($rs['user_pass'] != $pwdOld){
+                echo "<script type='text/javascript'>alert('Password Not Found in Register !!') </script>";
+            }else {
+                if($pwdNew != $pwdReNew){
+                    echo "<script type='text/javascript'>alert('Password Not Match!!') </script>";
+                }else {
+                    if ($stmt = $mysqli->prepare("UPDATE hm_user SET user_user=?,user_pass=? WHERE user_id = ?")) {
+                        $stmt->bind_param('ssi',$username,$pwdNew,$_SESSION['user_id']);
+                        $stmt->execute();
+                    }
+                }
+            }   
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,37 +49,37 @@ include ("../config/connect-db.php");
 
 <body>
     <div class="header">
-        <?php include("../components/header.php"); ?>
+        <?php include "../components/header.php";?>
     </div>
     <div class="content">
         <div class="row body_c">
-            <div class="col-md-4 card_c card" style="width: 18rem;">
+            <div class="col-md-4 card_c card" style="width: 18rem;height:26rem;">
                 <div class="row">
-                    <div class="imame-user" style="margin:10px 10px 10px 10px;">
+                    <div class="imame-user" style="margin:10px 110px 10px 10px;">
                     <img class="img-profile img-circle img-responsive center-block"
                                 src="<?=$_SESSION['user_img']?>" alt="profile" width="200" height="200">
                         <div class="form-group">
-                            <label for="exampleFormControlFile1">แก้ไขรูปภาพ</label>
-                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                            <!-- <label for="exampleFormControlFile1">แก้ไขรูปภาพ</label> -->
+                            <!-- <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
                         </div>
                     </div>
                     <div class="user-info col-md-6">
                         <label class="label_c" style="margin:10px 0px 0px -50px;font-size:26px;">ข้อมูลส่วนตัว</label>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
-                            <label class="label_c">ชื่อ-สกุล : <?= $_SESSION['user_name']; ?></label>
+                            <label class="label_c">ชื่อ-สกุล : <?=$_SESSION['user_name'];?></label>
                         </div>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
-                            <label class="label_c">เบอร์โทร : <?= $_SESSION['user_tel']; ?></label>
+                            <label class="label_c">เบอร์โทร : <?=$_SESSION['user_tel'];?></label>
                         </div>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
-                            <label class="label_c">อีเมล์ : <?= $_SESSION['user_email']; ?></label>
+                            <label class="label_c">อีเมล์ : <?=$_SESSION['user_email'];?></label>
                         </div>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
-                            <label class="label_c">ไลน์ : <?= $_SESSION['user_line']; ?></label>
+                            <label class="label_c">ไลน์ : <?=$_SESSION['user_line'];?></label>
                         </div>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
                             <label class="label_c">สถานะ :
-                                <?= ($_SESSION['status_id']=='1'?'ผู้ดูแลระบบ':'หมอนวด'); ?></label>
+                                <?=($_SESSION['status_id'] == '1' ? 'ผู้ดูแลระบบ' : 'หมอนวด');?></label>
                         </div>
                     </div>
                     <div>
@@ -72,7 +101,8 @@ include ("../config/connect-db.php");
                     <div class="wrap-login100">
                         <form class="login100-form validate-form">
                             <span class="login100-form-title">
-                                แก้ไขข้อมูลล็อกอิน
+                            <i class="fas fa-user-edit"></i>    
+                            แก้ไขข้อมูลล็อกอิน
                             </span>
                             <div class="wrap-input100 validate-input">
                                 <label class="col-md-6" for="username">ชื่อผู้ใช้งาน
@@ -111,7 +141,8 @@ include ("../config/connect-db.php");
                             </div>
                             <div class="container-login100-form-btn m-t-20">
                                 <button class="login100-form-btn btn btn-primary" type="submit" name="save">
-                                    แก้ไขข้อมูล
+                                <i class="fas fa-user-edit"></i>    
+                                แก้ไขข้อมูล
                                 </button>
                             </div>
                             <div class="text-center p-t-45 p-b-4">
@@ -129,7 +160,7 @@ include ("../config/connect-db.php");
         </div>
     </div>
     <div class="footer">
-        <?php include("../components/footer.php"); ?>
+        <?php include "../components/footer.php";?>
     </div>
 </body>
 

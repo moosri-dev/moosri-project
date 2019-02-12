@@ -11,15 +11,16 @@ if (isset($_POST['save'])) {
     $file_err = $_FILES['fileToUpload']['error'];
     $file_size = $_FILES['fileToUpload']['size'];
     $location = '../uploads';
+    $file_destination="";
     $file_ext = explode('.', $file_name);
     $file_ext = strtolower(end($file_ext));
     $file_allow = array('jpg', 'jpeg', 'png');
     if (in_array($file_ext, $file_allow)) {
         if ($file_err === 0) {
-            if($file_size <= 2097152){
-            $file_name_new = uniqid('', true) . '.' . $file_ext;
-            $file_destination = $location . '/' . $file_name_new;
-            move_uploaded_file($temp_name, $file_destination);
+            if ($file_size <= 2097152) {
+                $file_name_new = uniqid('', true) . '.' . $file_ext;
+                $file_destination = $location . '/' . $file_name_new;
+                move_uploaded_file($temp_name, $file_destination);
             }
         }
     }
@@ -32,13 +33,30 @@ if (isset($_POST['save'])) {
     $status = $_POST['statusid'] = 2;
     $userId = $_SESSION['user_id'];
 
-    $sql = "UPDATE hm_user SET user_name=?,user_tel=?,user_email=?,user_line=?,user_address=?,user_img=?,status_id=? WHERE user_id = ?";
+
+    if (!$username) {
+        $username = $_SESSION['user_name'];
+    }
+    if (!$tel) {
+        $tel=$_SESSION['user_tel'];
+    }
+    if (!$email) {
+        $email=$_SESSION['user_email'];
+    }
+    if (!$line) {
+        $line = $_SESSION['user_line'];
+    }
+    if (!$address) {
+        $address=$_SESSION['user_address'];
+    }
+    if (!$file_destination) {
+        $file_destination=$_SESSION['user_img'];
+    }
 
     /* create a prepared statement */
-    if ($stmt = $mysqli->prepare("UPDATE hm_user SET user_name=?,user_tel=?,user_email=?,user_line=?,user_address=?,user_img=?,status_id=? WHERE user_id = ?")) {
-
+    if ($stmt = $mysqli->prepare("UPDATE hm_user SET user_name=?,user_tel=?,user_email=?,user_line=?,user_address=?,user_img=? WHERE user_id = ?")) {
         /* bind parameters for markers */
-        $stmt->bind_param('ssssssii', $username, $tel, $email, $line, $address, $file_destination, $status, $userId);
+        $stmt->bind_param('ssssssi', $username, $tel, $email, $line, $address, $file_destination, $userId);
 
         /* execute query */
         $stmt->execute();
@@ -52,25 +70,24 @@ if (isset($_POST['save'])) {
         echo "Error:" . $sql . "<br>" . $mysqli->error;
         // header('refresh:2;');
     }
-    
 
     $stmt2 = $mysqli->prepare("SELECT * FROM hm_user WHERE user_id = ?");
     $stmt2->bind_param("i", $userId);
     $stmt2->execute();
     $rs = $stmt2->get_result();
     if ($rs->num_rows === 0) {
-        exit('No rows : '.$userId);
-    }else{
+        exit('No rows : ' . $userId);
+    } else {
         while ($row = $rs->fetch_assoc()) {
             $_SESSION['user_img'] = $row['user_img'];
-            $_SESSION['status_id']=$row['status_id'];
-            $_SESSION['user_id']=$row['user_id'];
-            $_SESSION['user_name']=$row['user_name'];
-            $_SESSION['user_tel']=$row['user_tel'];
-            $_SESSION['user_email']=$row['user_email'];
-            $_SESSION['user_line']=$row['user_line'];
-            $_SESSION['user_address']=$row['user_address'];
-    
+            $_SESSION['status_id'] = $row['status_id'];
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['user_name'] = $row['user_name'];
+            $_SESSION['user_tel'] = $row['user_tel'];
+            $_SESSION['user_email'] = $row['user_email'];
+            $_SESSION['user_line'] = $row['user_line'];
+            $_SESSION['user_address'] = $row['user_address'];
+
         }
     }
     $mysqli->close();
@@ -99,7 +116,7 @@ if (isset($_POST['save'])) {
             <div class="row body_c">
                 <div class="col-md-4 card_c card" style="width: 18rem;">
                     <div class="row">
-                        <div class="imame-user" style="margin:10px 10px 10px 10px;">
+                        <div class="imame-user" style="margin:10px 1px 10px 10px;">
                             <img class="img-profile img-circle img-responsive center-block"
                                 src="<?=$_SESSION['user_img']?>" alt="profile" width="200" height="200">
                                 <!-- src="https://bootdey.com/img/Content/avatar/avatar6.png" alt=""> -->
@@ -145,7 +162,8 @@ if (isset($_POST['save'])) {
                 <div class="col-md-6">
                     <div class="wrap-login100">
                         <span class="login100-form-title">
-                            แก้ไขข้อมูลส่วนตัว
+                        <i class="fas fa-user-edit"></i>    
+                        แก้ไขข้อมูลส่วนตัว
                         </span>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="username">ชื่อ-สกุล</label>
@@ -193,7 +211,8 @@ if (isset($_POST['save'])) {
                         </div>
                         <div class="container-login100-form-btn m-t-20">
                             <button class="login100-form-btn btn btn-primary" type="submit" name="save">
-                                แก้ไขข้อมูลส่วนตัว
+                            <i class="fas fa-user-edit"></i>    
+                            แก้ไขข้อมูลส่วนตัว
                             </button>
                         </div>
                         <div class="text-center p-t-45 p-b-4">

@@ -27,7 +27,7 @@ if (isset($_GET['searchBtn'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/profile.css">
+    <link rel="stylesheet" href="../assets/css/search.css">
 </head>
 
 <body>
@@ -36,11 +36,12 @@ if (isset($_GET['searchBtn'])) {
     </div>
     <div class="content" style="margin:0% 0% 15% 10%;width:80%;">
         <div class="row body_c">
-            <div class="col-md-12">
+            <div class="col-md-12 card_search">
                 <form method="get">
-                    <div class="row" style="margin:10% 0% 2% 0%;">
+                    <div class="row" style="margin:5% 0% 2% 0%;">
                         <div class="col-md-12 form-group">
-                            <label for="search">ค้นหาหมอนวด</label>
+                            <h4 for="search">
+                            <i class="fas fa-search"></i>ค้นหาหมอนวด</h4>
                             <input autocomplete="off" type="text" class="form-control form-control-md" name="srcTxt" id="srcTxt" placeholder="นางสางขยันนวด ทุกวัน">
                             <small id="helpId" class="form-text text-muted">ค้นหาหมอนวดจาก ชื่อ,นามสกุล</small>
                             <button type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" btn-md
