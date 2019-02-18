@@ -242,3 +242,25 @@ body{
 .panel{
 	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
 }
+td>select{
+	width: 100%;
+	border-radius: 4px;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	height: 34px;
+}
+td>input{
+	text-align: center;
+}
+.form-control[readonly]{
+	background: #fff;
+}
+.table#myTable{
+	margin-bottom: 10px;
+}
+.footer{
+	text-align: center;
+}
+.footer>button{
+	width: 40%;
+}
