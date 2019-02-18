@@ -176,7 +176,7 @@ body{
 	border-bottom: 1px solid #eee;
 }
 .sidebar-nav a{
-	color: mediumblue;
+	color: hotpink;
 	font-size: 15px;
 }
 .sidebar-nav a i{
@@ -263,4 +263,9 @@ td>input{
 }
 .footer>button{
 	width: 40%;
+}
+tr.click-me:hover{
+	cursor: pointer;
+	background-color: springgreen !important;
+	color:#fff;
 }

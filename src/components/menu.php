@@ -4,7 +4,8 @@
         session_start(); 
     }
 
-    if(!isset($_SESSION['user_id'])){
+    echo "ISSET : ".isset($_SESSION['user_id']);
+    if(isset($_SESSION['user_id']) && $_SESSION['status_id'] != 1){
         header('location: /moosri-project/');
     }
 ?>
@@ -42,58 +43,57 @@
             <?php
                 echo "<img src ='uploads/".$_SESSION['user_img']."' class='image profile'/>";
             ?>
-            <div class="name f-bold text-left">ชื่อ: <?php echo $_SESSION['user_name'] ?></div>
-            <div class="name f-bold text-left">สถานะ: <?php echo $_SESSION['status_id']==1?'ผู้ดูแลระบบ':'หมอนวด' ?></div>
+            <div class="name f-bold text-left" style="color: royalblue;">ชื่อ: <?php echo $_SESSION['user_name'] ?></div>
+            <div class="name f-bold text-left" style="color: royalblue;">สถานะ: <?php echo $_SESSION['status_id']==1?'ผู้ดูแลระบบ':'หมอนวด' ?></div>
 
         </div>
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="pages/admin.php"><i class="fa fa-dashboard fa-fw"></i>&nbsp&nbsp&nbsp&nbspหน้าแรก</a>
+                    <a href="pages/admin.php"><i class="fa fa-dashboard fa-fw"></i>&nbsp&nbsp&nbsp&nbsp หน้าแรก</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspจัดการข้อมูลผู้ใช้งาน<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลผู้ใช้งาน<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="pages/admin-management.php"><i class="fa fa-male" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspข้อมูลเจ้าหน้าที่ดูแลระบบ</a>
+                            <a href="pages/admin-management.php"><i class="fa fa-male" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลเจ้าหน้าที่ดูแลระบบ</a>
                         </li>
                         <li>
-                            <a href="pages/massager-management.php"><i class="fa fa-female" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspข้อมูลหมอนวด</a>
+                            <a href="pages/massager-management.php"><i class="fa fa-female" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลหมอนวด</a>
                         </li>
                         <li>
-                            <a href="pages/add-user.php"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspเพิ่มข้อมูลผู้ใช้งาน</a>
+                            <a href="pages/add-user.php"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มข้อมูลผู้ใช้งาน</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-product-hunt" aria-hidden="true"></i></i>&nbsp&nbsp&nbsp&nbspจัดการข้อมูลสินค้า<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-product-hunt" aria-hidden="true"></i></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลสินค้า<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="pages/product-management.php"><i class="fa fa-info" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspข้อมูลสินค้า</a>
+                                <a href="pages/product-management.php"><i class="fa fa-info" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลสินค้า</a>
                             </li>
                             <li>
-                                <a href="pages/add-product.php"><i class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspเพิ่มสินค้า</a>
+                                <a href="pages/add-product.php"><i class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มสินค้า</a>
                             </li>
                         </ul>
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspจัดการข้อมูลการขายสินค้า<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลการขายสินค้า<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="pages/order-management.php"><i class="fa fa-cc" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspรายการขายสินค้า</a>
+                            <a href="pages/order-management.php"><i class="fa fa-cc" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp รายการขายสินค้า</a>
                         </li>
                         <li>
-                            <a href="pages/add-items.php"><i class="fa fa-money" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspเพิ่มรายการขายสินค้า</a>
+                            <a href="pages/add-items.php"><i class="fa fa-money" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มรายการขายสินค้า</a>
+                        </li>
+                        <li>
+                            <a href="pages/bill-report.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp พิมพ์รายการขายสินค้า</a>
                         </li>
                     </ul>
                 <!-- /.nav-second-level -->
                 </li>
-                <li>
-                    <a href="pages/bill-report.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspพิมพ์ใบเสร็จ</a>
-                </li>
-
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

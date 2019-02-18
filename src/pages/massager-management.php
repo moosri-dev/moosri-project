@@ -43,6 +43,10 @@
             let url = "pages/edit-user.php?id="+id;
             window.location.href = url;
         }
+        function openSchedule(id){
+            let url = "pages/massager-schedule.php?id="+id;
+            window.location.href = url;
+        }
     </script>
 </head>
 
@@ -98,7 +102,7 @@
                                         $result  = $stmt->get_result();
                                         $rows = 1;
                                         while($rs=$result->fetch_object()){
-                                            echo '<tr>';
+                                            echo '<tr class="click-me" onclick="openSchedule('.$rs->id.')">';
                                             echo '<td class="text-center">'.$rows.'</td>';
                                             echo '<td class="text-center"><img src="'.'uploads/'.$rs->image.'" class="item image"/></td>';
                                             echo '<td class="text-center">'.$rs->username.'</td>';
