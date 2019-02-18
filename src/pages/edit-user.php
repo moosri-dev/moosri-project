@@ -28,19 +28,6 @@
             while($rs=$result->fetch_object()){
     ?>
 
-<!-- DataTables JavaScript -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                responsive: true
-            });
-        });
-    </script>
-
 </head>
 
 <body>
@@ -62,7 +49,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post" action="pages/update-user.php">
+                            <form method="post" action="pages/update-user.php" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <input type="text" name="userId"  value='<?php echo $rs->id ?>' hidden/>
                                     <div class="col-md-4 text-right">
@@ -142,10 +129,11 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="profile" id="my-file" type="file" value="<?php echo $rs->image ?>">
-                                            <label tabindex="0" for="my-file" class="input-file-trigger">เลือกไฟล์</label>
+                                            <input type ="text" <?php echo("value =".$rs->image);?> name="fileImage" hidden/>
+                                            <input class="input-file" name="fileToUpload" id="fileToUpload" type="file">
+                                            <label tabindex="0" for="fileToUpload" class="input-file-trigger ">เลือกไฟล์</label>
                                         </div>
-                                        <p class="file-return" ></p>
+                                        <p class="file-return"><?php echo($rs->image);?></p>
                                     </div>
                                 </div>
 
@@ -202,7 +190,7 @@
         return false;
         });  
         fileInput.addEventListener( "change", function( event ) {  
-            the_return.innerHTML = this.value;  
+            the_return.innerHTML = this.value.replace("C:\\fakepath\\","");  
         });  
     </script>
 </body>

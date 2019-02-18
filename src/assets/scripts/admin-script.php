@@ -25,3 +25,7 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="assets/libs/dist/js/sb-admin-2.js"></script>
+
+<link href="assets/css/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/font/font-awesome/css/font-awesome.min.css">

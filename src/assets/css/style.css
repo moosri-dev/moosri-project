@@ -20,6 +20,9 @@ body{
 	font-size: var(--font-size-base);
 }
 
+.f-bold{
+	font-weight: var(--font-weight-bold-base);
+}
 .margin-top-80{
 	margin-top: 80px;
 }
@@ -153,4 +156,89 @@ body{
     bottom: 0;
 		width: 100%;
 		margin-top: 2%;
+}
+
+.nav-container{
+	background-color: #fff;
+	border-bottom: 1px solid beige;
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+.sidebar{
+	position: fixed;
+	height: 100%;
+	margin: unset;
+	background: #fff;
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+.siderbar.header{
+	padding: 10px 20px;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+.sidebar-nav a{
+	color: mediumblue;
+	font-size: 15px;
+}
+.sidebar-nav a i{
+	font-size: 20px;
+	color: aqua;
+}
+.sidebar ul li a.active {
+	background-color: lightsteelblue;
+	color: #fff;
+}
+.sidebar ul li a:hover {
+	background-color: lightsteelblue;
+	color: #fff;
+}
+
+.image.profile{
+	width: 130px;
+	height: 130px;
+	border: 1px solid;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+.profile{
+	font-weight: var(--font-weight-bold-base);
+	color: darkorange;
+}
+.image-profile{
+	width: 30px;
+	border-radius: 50%;
+}
+.item.image{
+	width: 60px;
+	height: 60px;
+}
+#page-wrapper{
+	background-color: unset;
+	margin-top: 75px;
+}
+.page-header{
+	padding: 20px;
+	font-size: 16px;
+	border: unset;
+	background: #fff;
+	margin-top: 0px;
+}
+.sub-header{
+	background: #fff;
+	margin: 0px -30px;
+}
+#myTable>thead{
+	font-size: 14px;
+}
+#myTable th{
+	text-align: center;
+}
+#myTable>tbody{
+	font-size: 13px;
+}
+.icon:hover{
+	cursor: pointer;
+}
+.panel{
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
 }

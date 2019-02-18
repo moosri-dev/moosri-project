@@ -18,9 +18,6 @@
 <!-- DataTables JavaScript -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-  <!-- <script src="../assets/libs/vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="../assets/libs/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="../assets/libs/vendor/datatables-responsive/dataTables.responsive.js"></script> -->
     
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
      <script type="text/javascript">
@@ -62,25 +59,26 @@
             </div>
             <div class="row">
             <div class="col-lg-12">
-                    <div class="panel panel-default">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
-                            ตารางข้อมูลเจ้าหน้าที่ดูแลระบบ
+                            ตารางข้อมูลหมอนวด
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <table width="100%" class="table table-striped table-bordered table-hover" id="myTable">
                                 <thead>
                                     <tr>
-                                        <th>ลำดับที่</th>
-                                        <th>ชื่อผู้ใช้งาน</th>
-                                        <th>ชื่อ-นามสกุล</th>
-                                        <th>เบอร์โทร</th>
-                                        <th>อีเมล์</th>
-                                        <th>ไลน์</th>
-                                        <th>ที่อยู่</th>
-                                        <th>สถานะ</th>
-                                        <th>แก้ไขข้อมูล</th>
-                                        <th>ลบข้อมูล</th>
+                                        <th style="width:5%">#</th>
+                                        <th style="width:10%">รูปโปรไฟล์</th>
+                                        <th style="width:10%">ชื่อผู้ใช้งาน</th>
+                                        <th style="width:15%">ชื่อ-นามสกุล</th>
+                                        <th style="width:15%">ที่อยู่</th>
+                                        <th style="width:10%">เบอร์โทร</th>
+                                        <th style="width:5%">อีเมล์</th>
+                                        <th style="width:10%">ไลน์</th>
+                                        <th style="width:10%">สถานะ</th>
+                                        <th style="width:5%">แก้ไข</th>
+                                        <th style="width:5%">ลบ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -90,7 +88,7 @@
                                     $sql= 'SELECT 
                                                 u.user_id as id, u.user_user as username,u.user_name as name,u.user_tel as tel
                                                 ,u.user_email as email,u.user_line as line,u.user_address as address
-                                                ,s.status_name
+                                                ,u.user_img as image,s.status_name
                                             FROM hm_user u INNER JOIN hm_status s ON u.status_id = s.status_id
                                             WHERE u.status_id =?';
 
@@ -102,15 +100,16 @@
                                         while($rs=$result->fetch_object()){
                                             echo '<tr>';
                                             echo '<td class="text-center">'.$rows.'</td>';
-                                            echo '<td>'.$rs->username.'</td>';
-                                            echo '<td>'.$rs->name.'</td>';
-                                            echo '<td>'.$rs->tel.'</td>';
-                                            echo '<td>'.$rs->email.'</td>';
-                                            echo '<td>'.$rs->line.'</td>';
-                                            echo '<td>'.$rs->address.'</td>';
-                                            echo '<td>'.$rs->status_name.'</td>';
-                                            echo '<td class="text-center" onclick="editUser('.$rs->id.')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></td>';
-                                            echo '<td class="text-center" onclick="deleteUser('.$rs->id.','."'$rs->username'".')"><i class="fa fa-ban" aria-hidden="true"></i></td>';
+                                            echo '<td class="text-center"><img src="'.'uploads/'.$rs->image.'" class="item image"/></td>';
+                                            echo '<td class="text-center">'.$rs->username.'</td>';
+                                            echo '<td class="text-center">'.$rs->name.'</td>';
+                                            echo '<td class="text-center">'.$rs->address.'</td>';
+                                            echo '<td class="text-center">'.$rs->tel.'</td>';
+                                            echo '<td class="text-center">'.$rs->email.'</td>';
+                                            echo '<td class="text-center">'.$rs->line.'</td>';
+                                            echo '<td class="text-center">'.$rs->status_name.'</td>';
+                                            echo '<td class="text-center"><i class="fa fa-pencil-square-o icon" aria-hidden="true" onclick="editUser('.$rs->id.')"></i></td>';
+                                            echo '<td class="text-center"><i class="fa fa-ban icon" aria-hidden="true" onclick="deleteUser('.$rs->id.','."'$rs->username'".')"></i></td>';
                                             echo '</tr>';
                                             $rows++;
                                         }

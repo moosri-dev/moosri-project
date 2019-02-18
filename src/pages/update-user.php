@@ -1,6 +1,14 @@
 <?php
      if(isset($_POST['update'])){
         include('../config/connect-db.php');
+        include("../components/uploads.php");
+        if($file_destination != ""){
+            move_uploaded_file($temp_name, $file_destination);
+            unlink($location.'/'.$_POST['fileImage']);
+            $image = $file_name_new;
+        }else{
+            $image = $_POST['fileImage'];
+        }
         $userId = $_POST['userId'];
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -9,7 +17,6 @@
         $email = $_POST['email'];
         $line = $_POST['line'];
         $address = $_POST['address'];
-        $profile = $_POST['profile'];
         $status = $_POST['status'];
         $sql = "UPDATE hm_user 
         SET user_user=?,user_pass=?,user_name=?,user_tel=?,user_email=?,user_line=?,user_address=?,user_img=?,status_id=? 
@@ -19,7 +26,7 @@
         if($stmt = $mysqli->prepare($sql)){
 
             /* bind parameters for markers */
-            $stmt->bind_param('ssssssssii',$username,$password,$name,$tel,$email,$line,$address,$profile,$status,$userId);
+            $stmt->bind_param('ssssssssii',$username,$password,$name,$tel,$email,$line,$address,$image,$status,$userId);
             
             /* execute query */
             if($stmt->execute()){

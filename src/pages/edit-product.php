@@ -2,7 +2,11 @@
     if(session_status() == PHP_SESSION_NONE) 
     { 
         session_start(); 
-    } 
+    }
+
+    if(!isset($_SESSION['user_id'])){
+        header('location: /moosri-project/');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,20 +41,6 @@
                 $result  = $stmt->get_result();
                 while($rs=$result->fetch_object()){
     ?>
-
-<!-- DataTables JavaScript -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                responsive: true
-            });
-        });
-    </script>
-
 </head>
 
 <body>
@@ -72,7 +62,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post" action="pages/update-product.php">
+                            <form method="post" action="pages/update-product.php" enctype="multipart/form-data">
                                 <input type="text" name="pid"  value='<?php echo $pid ?>' hidden/>
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
@@ -117,8 +107,9 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="image" id="my-file" type="file" <?php echo("value =".$rs->image);?>>
-                                            <label tabindex="0" for="my-file" class="input-file-trigger ">เลือกไฟล์</label>
+                                            <input type ="text" <?php echo("value =".$rs->image);?> name="fileImage" hidden/>
+                                            <input class="input-file" name="fileToUpload" id="fileToUpload" type="file">
+                                            <label tabindex="0" for="fileToUpload" class="input-file-trigger ">เลือกไฟล์</label>
                                         </div>
                                         <p class="file-return"><?php echo($rs->image);?></p>
                                     </div>
@@ -142,17 +133,8 @@
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
-    <?php 
-            }$stmt->close();
-        }else{
-            echo "Error:".$sql."<br>".$mysqli->error;
-            header('refresh:2;');
-        }
-        $mysqli->close();
-        exit(0);
-    ?>
     <script type="text/javascript">
-        document.querySelector("html").classList.add('js');
+        document.querySelector("html").classList.add("js");
         var fileInput  = document.querySelector( ".input-file" ),  
             button     = document.querySelector( ".input-file-trigger" ),
             the_return = document.querySelector(".file-return");
@@ -167,8 +149,19 @@
         return false;
         });  
         fileInput.addEventListener( "change", function( event ) {  
-            the_return.innerHTML = this.value;  
+            the_return.innerHTML = this.value.replace("C:\\fakepath\\","");   
         });  
     </script>
+    <?php 
+            }$stmt->close();
+        }else{
+            echo "Error:".$sql."<br>".$mysqli->error;
+            header('refresh:2;');
+        }
+        $mysqli->close();
+        exit(0);
+    ?>
+
+
 </body>
 </html>

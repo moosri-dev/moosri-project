@@ -15,7 +15,10 @@
         echo '<title>'.$title.'</title>';
 
         if(isset($_POST['save'])){
+            include('../components/uploads.php');
             include('../config/connect-db.php');
+            move_uploaded_file($temp_name, $file_destination);
+            $image = $file_name_new;
             $username = $_POST['username'];
             $password = $_POST['password'];
             $name = $_POST['name'];
@@ -23,7 +26,6 @@
             $email = $_POST['email'];
             $line = $_POST['line'];
             $address = $_POST['address'];
-            $profile = $_POST['profile'];
             $status = $_POST['status'];
 
             $sql = "INSERT INTO 
@@ -34,16 +36,18 @@
             if($stmt = $mysqli->prepare($sql)){
 
                 /* bind parameters for markers */
-                $stmt->bind_param('ssssssssi',$username,$password,$name,$tel,$email,$line,$address,$profile,$status);
+                $stmt->bind_param('ssssssssi',$username,$password,$name,$tel,$email,$line,$address,$image,$status);
                 
-                /* execute query */
-                $stmt->execute();
-
+                if($stmt->execute()){
+                    echo "Insert data success!";
+                    header('location: admin-management.php');
+                }else{
+                echo "Error:".$sql."<br>".$mysqli->error;
+                header('refresh:2;');
+                }
                 /* close statement */
                 $stmt->close();
                 
-                echo "Insert data success!";
-                header('location: admin-management.php');
             }else{
                 echo "Error:".$sql."<br>".$mysqli->error;
                 header('refresh:2;');
@@ -53,11 +57,6 @@
             exit(0);
         }
     ?>
-
-<!-- DataTables JavaScript -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
      <script type="text/javascript">
         function validate(){
@@ -97,7 +96,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
                                         <label for="inputUsername">ชื่อผู้ใช้งาน<span class="required">*</span> :</label>
@@ -173,11 +172,11 @@
 
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
-                                        <label for="profile">รูปโปรไฟล์ :</label>
+                                        <label for="fileToUpload">รูปโปรไฟล์ :</label>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="profile" id="my-file" type="file">
+                                            <input class="input-file" name="fileToUpload" id="fileToUpload" type="file">
                                             <label tabindex="0" for="my-file" class="input-file-trigger">เลือกไฟล์</label>
                                         </div>
                                         <p class="file-return"></p>
@@ -232,7 +231,7 @@
         return false;
         });  
         fileInput.addEventListener( "change", function( event ) {  
-            the_return.innerHTML = this.value;  
+            the_return.innerHTML = this.value.replace("C:\\fakepath\\","");   
         });  
     </script>
 </body>

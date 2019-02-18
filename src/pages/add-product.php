@@ -2,11 +2,14 @@
     if(session_status() == PHP_SESSION_NONE) 
     { 
         session_start(); 
-    } 
+    }
+
+    if(!isset($_SESSION['user_id'])){
+        header('location: /moosri-project/');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -21,11 +24,13 @@
         echo '<title>'.$title.'</title>';
 
         if(isset($_POST['save'])){
+            include('../components/uploads.php');
+            move_uploaded_file($temp_name, $file_destination);
             include('../config/connect-db.php');
+            $image = $file_name_new;
             $pname = $_POST['pname'];
             $price = $_POST['price'];
             $unit = $_POST['unit'];
-            $image = $_POST['image'];
             $detail = $_POST['detail'];
             $user_id = $_SESSION['user_id'];
             $sql = "INSERT INTO 
@@ -39,14 +44,17 @@
                 $stmt->bind_param('ssiisi',$pname,$detail,$price,$unit,$image,$user_id);
                 
                 /* execute query */
-                $stmt->execute();
-
+                if($stmt->execute()){
+                    include ("../components/uploads.php");
+                    echo "Insert data success!";
+                    header('location: product-management.php');
+                }else{
+                    echo "Error:".$sql."<br>".$mysqli->error;
+                    header('refresh:2;');
+                }
                 /* close statement */
                 $stmt->close();
                 
-                echo "Insert data success!";
-                echo $sql;
-                header('location: product-management.php');
             }else{
                 echo "Error:".$sql."<br>".$mysqli->error;
                 header('refresh:2;');
@@ -56,20 +64,6 @@
             exit(0);
         }
     ?>
-
-<!-- DataTables JavaScript -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">  
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                responsive: true
-            });
-        });
-    </script>
-
 </head>
 
 <body>
@@ -91,7 +85,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
                                         <label for="inputPname">ชื่อสินค้า<span class="required">*</span> :</label>
@@ -135,7 +129,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-file-container">  
-                                            <input class="input-file" name="image" id="my-file" type="file">
+                                            <input class="input-file" name="fileToUpload" id="fileToUpload" type="file">
                                             <label tabindex="0" for="my-file" class="input-file-trigger">เลือกไฟล์</label>
                                         </div>
                                         <p class="file-return"></p>
@@ -177,8 +171,9 @@
         return false;
         });  
         fileInput.addEventListener( "change", function( event ) {  
-            the_return.innerHTML = this.value;  
+            the_return.innerHTML = this.value.replace("C:\\fakepath\\","");  
         });  
     </script>
+    
 </body>
 </html>
