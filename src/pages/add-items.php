@@ -21,44 +21,59 @@
     echo '<title>'.$title.'</title>';
 
 
-    // if(isset($_POST['save'])){
-    //     include('../config/connect-db.php');
-    //     $image = $file_name_new;
-    //     $pname = $_POST['pname'];
-    //     $price = $_POST['price'];
-    //     $unit = $_POST['unit'];
-    //     $detail = $_POST['detail'];
-    //     $user_id = $_SESSION['user_id'];
-    //     $sql = "INSERT INTO 
-    //     hm_product(product_name,product_detail,product_price,product_unit,product_img,user_id) 
-    //     VALUES(?,?,?,?,?,?)";
+    if(isset($_POST['save'])){
+        include('../config/connect-db.php');
+        $pid = $_POST['pid'];
+        $price = $_POST['price'];
+        $unit = $_POST['unit'];
+        $total = $_POST['total'];
+        $detail =  $_POST['detail'];
+        $sumTotal = 0;
+        $datum = new DateTime();
+        $createDate = $datum->format('Y-m-d H:i:s');
+        $userId = $_SESSION['user_id'];
+        foreach($total as $t){
+            $sumTotal += $t;
+        }
 
-    //     /* create a prepared statement */
-    //     if($stmt = $mysqli->prepare($sql)){
+        $sql = "INSERT INTO hm_orders(order_details,user_id,total,create_date) 
+        VALUES(?,?,?,?)";
+        if($stmt = $mysqli->prepare($sql)){
+            $stmt->bind_param('sids',$detail,$userId,$sumTotal,$createDate);
 
-    //         /* bind parameters for markers */
-    //         $stmt->bind_param('ssiisi',$pname,$detail,$price,$unit,$image,$user_id);
-            
-    //         /* execute query */
-    //         if($stmt->execute()){
-    //             include ("../components/uploads.php");
-    //             echo "Insert data success!";
-    //             header('location: product-management.php');
-    //         }else{
-    //             echo "Error:".$sql."<br>".$mysqli->error;
-    //             header('refresh:2;');
-    //         }
-    //         /* close statement */
-    //         $stmt->close();
-            
-    //     }else{
-    //         echo "Error:".$sql."<br>".$mysqli->error;
-    //         header('refresh:2;');
-    //     }
-    //     $mysqli->close();
-
-    //     exit(0);
-    // }
+            if($stmt->execute()){
+                $oid = $mysqli->insert_id;
+                for($i = 0;$i<sizeof($price);$i++){
+                    $sql2= "INSERT INTO hm_order_details(order_id,product_id,quantity,price) 
+                        VALUES(?,?,?,?)";
+                    if($stmt2 = $mysqli->prepare($sql2)){
+        
+                        $stmt2->bind_param('iiid',$oid,$pid[$i],$unit[$i],$price[$i]);
+                        
+                        if($stmt2->execute()){
+                            echo "Insert data success!";
+                            header('location: order-management.php');
+                        }else{
+                        echo "Error:".$sql2."<br>".$mysqli->error;
+                        header('refresh:2;');
+                        }
+                        /* close statement */
+                        $stmt2->close();
+                        
+                    }else{
+                        echo "Error:".$sql."<br>".$mysqli->error;
+                        header('refresh:2;');
+                    }
+                }
+                $stmt->close();
+            }else{
+                echo "Error:".$sql."<br>".$mysqli->error;
+                header('refresh:2;');
+            }
+            $mysqli->close();
+        }
+        exit(0);
+    }
   ?>
 </head>
 
@@ -69,15 +84,15 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">ประวัติข้อมูลการขายสินค้า</h1>
+                    <h1 class="page-header">จัดการข้อมูลการขายสินค้า</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <div class="row">
-            <div class="col-lg-12">
+            <div class="col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            ตารางข้อมูลรายการขายสินค้า
+                            ตารางเพิ่มข้อมูลรายการขายสินค้า
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -86,7 +101,7 @@
                                     <div class="col-md-4 text-right">
                                         <label for="inputUsername">รายละเอียดรายการสินค้า<span class="required">*</span> :</label>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-6">
                                         <input type="text" name="detail" class="form-control" placeholder='รายละเอียดรายการสินค้า' maxlength='50' required/>
                                     </div>
                                 </div>
@@ -108,7 +123,7 @@
                                     </table>
                                     <!-- /.table-responsive -->
                                     <div class="footer">
-                                        <button type="submit" class="btn btn-lg btn-primary" id="save" disabled>บันทึกข้อมูล</button>
+                                        <button type="submit" class="btn btn-lg btn-primary" name="save" id="save" disabled>บันทึกข้อมูล</button>
                                     </div>
                                 </div>
                             </form> 
@@ -128,7 +143,7 @@
 
 <?php 
     include('../config/connect-db.php');
-    $sql= 'SELECT product_id as pid, product_name as pname, product_price as price, product_unit as unit 
+    $sql= 'SELECT product_id as pid, product_name as pname, product_price as price, product_unit as amount 
         FROM hm_product';
     if($stmt = $mysqli->prepare($sql)){
         $stmt->execute();
@@ -136,16 +151,19 @@
         $pid = array();
         $pname = array();
         $price = array();
+        $amount = array();
         while($rs=$result->fetch_object()){
             array_push($pid,$rs->pid);
             array_push($pname,$rs->pname);
             array_push($price,$rs->price);
+            array_push($amount,$rs->amount);
         }$stmt->close();
     }$mysqli->close();
     echo '<script type="text/javascript">';
     echo 'var pid = ' . json_encode($pid) . ';';
     echo 'var pname = ' . json_encode($pname) . ';';
     echo 'var priceValue = ' . json_encode($price) . ';';
+    echo 'var amount = ' . json_encode($amount) . ';';
     echo '</script>';
 ?>
 
@@ -172,10 +190,10 @@
         ++rowNum;
         sequence.setAttribute("style","line-height: 35px;");   
         sequence.innerHTML = rowNum;
-        productName.innerHTML = '<select name="product[]" class="custom-select" onchange="selectChangeValue(this)" required>'+optionsAsString+'</select>';
-        quantity.innerHTML = '<input type="number" name="unit[]" id="unit" class="form-control" value="0" onchange="changeValue(this)" min="0" required>';
+        productName.innerHTML = '<select name="pid[]" class="custom-select" onchange="selectChangeValue(this)" required>'+optionsAsString+'</select>';
+        quantity.innerHTML = '<input type="number" name="unit[]" id="unit" class="form-control" value="1" onchange="changeValue(this)" onkeyup="myKeyChange(event,this)" min="1" max="'+amount[0]+'" required>';
         price.innerHTML = '<input type="number" name="price[]" id="price" class="form-control" value="'+priceValue[0]+'" readonly required>';
-        total.innerHTML = '<input type="number" name="total[]" id="total" class="form-control" value="0" readonly required>';
+        total.innerHTML = '<input type="number" name="total[]" id="total" class="form-control" value="'+priceValue[0]+'" readonly required>';
 
         del.setAttribute("style","line-height: 35px;");   
         del.innerHTML = '<i class="fa fa-ban icon" aria-hidden="true" onclick="deleteItem(this)"></i>';
@@ -187,10 +205,11 @@
         let unit = row.children[2].children[0];
         let price = row.children[3].children[0];
         let total = row.children[4].children[0];
-        // console.log(product.options[product.selectedIndex].value);
-        console.log(price);
+
         price.value = priceValue[param.selectedIndex];
+        unit.value = 1;
         total.value = price.value * unit.value;
+        unit.setAttribute('max',amount[param.selectedIndex]);
     }
     function changeValue(param){
         let row = param.parentElement.parentElement;
@@ -204,6 +223,15 @@
         table.deleteRow(row.rowIndex);
         if(table.rows.length == 1){
             document.getElementById("save").disabled = true;
+        }
+    }
+    function myKeyChange(event,param){
+        if(parseInt(param.value) > parseInt(param.max)){
+            event.preventDefault();
+            param.value = param.max;
+        }else if(parseInt(param.value) < parseInt(param.min) ||param.value == "" ){
+            event.preventDefault();
+            param.value = param.min;
         }
     }
 </script>

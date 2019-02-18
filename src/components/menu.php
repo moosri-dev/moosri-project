@@ -79,13 +79,13 @@
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-history" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspประวัติข้อมูลการขายสินค้า<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspจัดการข้อมูลการขายสินค้า<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="pages/order-management.php">&nbsp&nbsp&nbsp&nbspรายการขายสินค้า</a>
+                            <a href="pages/order-management.php"><i class="fa fa-cc" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspรายการขายสินค้า</a>
                         </li>
                         <li>
-                            <a href="pages/add-order.php">&nbsp&nbsp&nbsp&nbspเพิ่มรายการขายสินค้า</a>
+                            <a href="pages/add-items.php"><i class="fa fa-money" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspเพิ่มรายการขายสินค้า</a>
                         </li>
                     </ul>
                 <!-- /.nav-second-level -->
