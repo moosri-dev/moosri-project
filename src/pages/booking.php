@@ -13,7 +13,6 @@ $ms = $mysqli->prepare("SELECT * FROM hm_booking");
 $ms->execute();
 $list = $ms->get_result();
 
-// CREATE TABLE `moosi-massage`.`hm_booking_details` ( `bk_id` INT NOT NULL AUTO_INCREMENT , `bk_fullname` VARCHAR(50) NOT NULL , `bk_tel` VARCHAR(12) NOT NULL , `bk_line` VARCHAR(15) NOT NULL , `book_time` TIME(6) NOT NULL , `hm_user_id` INT(2) NOT NULL , `bk_id_fk` INT(2) NOT NULL , PRIMARY KEY (`bk_id`)) ENGINE = InnoDB;
 //add data booking
 if (isset($_POST['save'])) {
     $name = $_POST['username'];
@@ -22,31 +21,33 @@ if (isset($_POST['save'])) {
     $bkid = $_POST['bkid'];
     $empid = $_POST['empid'];
     $timeS = $_POST['timeStart'];
-
+    $timeE = $_POST['timeEnd'];
+    $date = $_POST['bk_date'];
+    //หาเวลาที่นวดตาม ชั่วโมงบริการ
     $ms2 = $mysqli->prepare("SELECT bk_time FROM hm_booking WHERE bk_id = ?");
     $ms2->bind_param("i", $bkid);
     $ms2->execute();
     $list2 = $ms2->get_result();
-    $useTime;
-    while ($row = $list2->fetch_assoc()) {
-        $useTime = $row['bk_time'];
+
+    //check ก่อนว่า หมอนวดที่ถูกจอง ว่าเวลานี้ไหม
+    if ($qry = $mysqli->prepare("SELECT bk.*, ur.* FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE  bk_time_end <= ? AND bk.hm_user_id = ?")) {
+        $qry->bind_param('si', $timeE, $empid);
+        $qry->execute();
+        $listChk = $qry->get_result();
+
+        if ($listChk->num_rows != 0) {
+            // echo "<script>alert('No');</script>";
+        } else {
+            //Insert ข้อมูลลงดาต้าเบส
+            $sql = "INSERT INTO hm_booking_details(bk_fullname, bk_tel, bk_line, bk_id_fk, hm_user_id, bk_time,bk_time_end,bk_date) VALUES(?,?,?,?,?,?,?,?)";
+            if ($q = $mysqli->prepare($sql)) {
+                $q->bind_param('sssiisss', $name, $tel, $line, $bkid, $empid, $timeS, $timeE, $date);
+                $q->execute();
+            } else {
+                echo "Error:" . $sql . "<br>" . $mysqli->error;
+            }
+        }
     }
-
-    $calTime = substr($timeS,0,2);
-    $x = ($calTime+$useTime);
-    $timeEnd = strtotime($x);
-    
-    // echo "timeS : ".substr($timeS,0,2);
-    echo "useTime : ".$timeEnd;
-    // echo "timeS + useTime ".($calTime+$useTime);
-
-    // $sql = "INSERT INTO hm_booking_details(bk_fullname, bk_tel, bk_line, bk_id_fk, hm_user_id, bk_time,bk_time_end) VALUES(?,?,?,?,?,?,?)";
-    // if($q=$mysqli->prepare($sql)){
-    //     $q->bind_param('sssiiss',$name,$tel,$line,$bkid,$empid,$timeS,$timeEnd);
-    //     $q->execute();
-    // }else{
-    //     echo "Error:".$sql."<br>".$mysqli->error;
-    // }
     $mysqli->close();
 }
 ?>
@@ -59,8 +60,10 @@ if (isset($_POST['save'])) {
     <!--    Style Sheet -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <!-- <link rel="stylesheet" href="../assets/css/style.css"> -->
     <link rel="stylesheet" href="../assets/css/booking.css">
+    <link rel="stylesheet" href="../assets/css/datepicker.css">
+
 </head>
 
 <body>
@@ -119,12 +122,12 @@ if (isset($_POST['save'])) {
                         <hr style="border:2px solid pink;width:640px;margin-left: -1px;">
                         <div class="container">
                             <label for="topic"><i class="fas fa-map-marker"></i>&nbsp;ค้นหาหมอนวด</label>
-                            <form method="get">
+                            <form method="POST">
                                 <div class="form-group">
                                     <label for="">ช่วงเวลา</label>
-                                    <input type="time" name="time" id="time" min="9:00" max="18:00">
+                                    <input type="time" name="timesSrh" id="timesSrh">
                                     <label for="">ถึง</label>
-                                    <input type="time" name="time" id="time" min="9:00" max="18:00">
+                                    <input type="time" name="timeeSrh" id="timeeSrh">
                                     <button type="submit" name="srchTime" id="srchTime" class="btn btn-sm btn-primary"
                                         btn-sm btn-block>ค้นหาหมอนวด</button>
                                 </div>
@@ -138,16 +141,25 @@ if (isset($_POST['save'])) {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+//Check เวลา ว่าถูกจองเวลานี้รึยัง
+if (isset($_POST['srchTime'])) {
+    echo "<script>alert('kkkk')</script>";
+    $timeS = $_POST['timesSrh'];
+    $timeE = $_POST['timeeSrh'];
+    $k = 1;
+    if ($qry = $mysqli->prepare("SELECT bk.*, ur.user_name FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE bk_time >= ? AND bk_time_end <= ? GROUP BY ur.user_name")) {
+        $qry->bind_param('ss', $timeS, $timeE);
+        $qry->execute();
+        $listChk = $qry->get_result();
+
+        while ($chk = $listChk->fetch_object()) {?>
                                     <tr>
-                                        <td scope="row">1</td>
-                                        <td>หมอนวด ขยัน</td>
-                                        <td style="color:green;text-align:center;"> ว่าง</td>
+                                        <td scope="row"><?=$k++;?></td>
+                                        <td><?=$chk->user_name?></td>
+                                        <td style="color:red;text-align:center;"> ไม่ว่าง</td>
                                     </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>sora aoi</td>
-                                        <td style="color:red;text-align:center;">ไม่ว่าง</td>
-                                    </tr>
+                                    <?php }} else {echo "Error";}}?>
                                 </tbody>
                             </table>
                         </div>
@@ -194,7 +206,6 @@ if (isset($_POST['save'])) {
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-8" for="status">เลือกรับบริการจากหมอนวด</label>
-                            <!-- <small id="helpId" class="form-text text-muted">(ระบบแสดงเฉพาะข้อมูลหมอนวดที่ ว่าง)</small> -->
                             <select class="custom-select" name="empid" id="empid">
                                 <option value="0">รายชื่อหมอนวด</option>
                                 <?php while ($data = $r->fetch_assoc()) {?>
@@ -204,11 +215,16 @@ if (isset($_POST['save'])) {
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
+                        <div class="wrap-input100 form-group">
+                            <label class="col-md-4" for="time">วันที่จอง</label>
+                            <input type="text" autocomplete="off" name="bk_date" id="datepicker" data-date-format="DD MMMM YYYY"
+                                class="form-control">
+                        </div>
                         <div class="wrap-input100 validate-input form-group">
                             <label class="col-md-4" for="time">ช่วงเวลา</label>
-                            <input class="form-control" type="time" name="timeStart" id="timeStart" >
-                            <!-- <label for="">ถึง</label>
-                            <input type="time" name="timeEnd" id="timeEnd" min="9:00" max="18:00"> -->
+                            <input class="form-control" type="time" name="timeStart" id="timeStart">
+                            <label class="col-md-4" for="time">ถึง</label>
+                            <input class="form-control" type="time" name="timeEnd" id="timeEnd">
                         </div>
                         <div class="container-login100-form-btn m-t-20">
                             <button class="login100-form-btn btn btn-primary" type="submit" name="save">
@@ -230,24 +246,36 @@ if (isset($_POST['save'])) {
 </body>
 
 <!-- Script -->
-<script src="../assets/Js/header.js"></script>
-<script src="../assets/Js/login.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
 </script>
-<!-- <script language="javascript"> window.location.href = "src/pages/index.php"</script> -->
 
-<script type="text/javascript">
-var timepicker = new TimePicker('timeStart', {
-    lang: 'en',
-    theme: 'dark'
+<!-- for Date -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/th.js"></script> -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="../assets/Js/jqueryui_datepicker_thai_min.js"></script>
+
+<!-- For Alert  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#datepicker").datepicker_thai({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: false,
+        changeYear: true,
+        numberOfMonths: 1,
+        langTh: true,
+        yearTh: true,
+    });
 });
-timepicker.on('change', function(evt) {
-    var value = (evt.hour || '00') + ':' + (evt.minute || '00');
-    evt.element.value = value;
-});
+
+// fnAlertErr(){
+//     $.alert({title: 'ขอภัยค่ะ',content: 'ขอภัยค่ะ หมอนวดคนนี้กำลังอยู่ในช่วงเวลาบริการค่ะ กรุณาเลือกหมอนวดใหม่',})
+// }
 </script>
 
 </html>
