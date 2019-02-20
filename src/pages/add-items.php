@@ -31,6 +31,56 @@
         $sumTotal = 0;
         $createDate = $_POST['createDate'];
         $userId = $_SESSION['user_id'];
+
+        $tmpPid = $pid[0];
+   
+        $pidList = array($tmpPid);
+        $pidSort = array();
+        foreach($pid as $p){
+            array_push($pidSort,$p);
+        }
+        sort($pidSort);
+        for($i =0; $i<sizeof($pidSort); $i++){
+            if($pidSort[$i] != $tmpPid){
+                array_push($pidList,$pidSort[$i]);
+                $tmpPid = $pidSort[$i];
+            }
+        }
+        $quanlityList = array();
+        foreach($pidList as $p){
+            $sumQuantity = 0;
+            for($i =0; $i<sizeof($pid); $i++){
+                if($pid[$i] == $p){
+                    $sumQuantity+= $unit[$i];
+                }
+            }
+            $sql = 'SELECT product_id as pid, product_unit as punit,product_name as pname FROM hm_product WHERE product_id = ?';
+                if($stmt = $mysqli->prepare($sql)){
+                    $stmt->bind_param('i',$p);
+                    if($stmt->execute()){
+                        $result  = $stmt->get_result();
+                        while($rs=$result->fetch_object()){
+                            if((int)$sumQuantity > (int)$rs->punit){
+                                echo " จำนวนสินค้า: ".$rs->pname." มีไม่เพียงพอ!!!";
+                                header('refresh:10;');
+                            }else{
+                                $resultUnit = (int)$rs->punit - (int)$sumQuantity;
+                                $sql2='UPDATE hm_product SET product_unit = ? WHERE product_id = ?';
+                                if($stmt2 = $mysqli->prepare($sql2)){
+                                    $stmt2->bind_param('ii',$resultUnit,$p);
+                                    if(!$stmt2->execute()){
+                                        echo " ERROR: ".$sql2."<br>".$mysqli->error;
+                                    }
+                                    $stmt2->close();
+                                }
+                            }
+                        }
+                    }
+                    $stmt->close();
+                }
+            array_push($quanlityList,$sumQuantity);
+        }
+        
         foreach($total as $t){
             $sumTotal += $t;
         }
@@ -50,24 +100,24 @@
                         $stmt2->bind_param('iiid',$oid,$pid[$i],$unit[$i],$price[$i]);
                         
                         if($stmt2->execute()){
-                            echo "Insert data success!";
-                            header('location: order-management.php');
+                            echo "Insert data success!<br>";
+                            header('Refresh:5;url=order-management.php');
                         }else{
                         echo "Error:".$sql2."<br>".$mysqli->error;
-                        header('refresh:2;');
+                        header('refresh:5;');
                         }
                         /* close statement */
                         $stmt2->close();
                         
                     }else{
                         echo "Error:".$sql."<br>".$mysqli->error;
-                        header('refresh:2;');
+                        header('refresh:5;');
                     }
                 }
                 $stmt->close();
             }else{
                 echo "Error:".$sql."<br>".$mysqli->error;
-                header('refresh:2;');
+                header('refresh:5;');
             }
             $mysqli->close();
         }
@@ -179,23 +229,10 @@
     var table = document.getElementById("myTable");
     var rowNum = 0;
     var optionsAsString = "";
-    var selectedValue = new Array();
     for(var i = 0; i < pid.length; i++) {
         optionsAsString += "<option value='" + pid[i] + "'>" + pname[i] + "</option>";
     }
     function addItem(){
-        if(table.rows.length > pid.length){
-            return false;
-        }
-        for(var i=0;i<selectedValue.legnth;i++){
-            optionsAsString = "";
-            for(var j=0;j<pid.length;j++){
-                if(selectedValue[i] != pid[j]){
-                    console.log("selectedValue",selectedValue);
-                    optionsAsString += "<option value='" + pid[j] + "'>" + pname[j] + "</option>";
-                }
-            }
-        }
         let row = table.insertRow();
         row.className = "text-center";
         row.setAttribute("id",rowNum);
@@ -216,9 +253,6 @@
 
         del.setAttribute("style","line-height: 35px;");   
         del.innerHTML = '<i class="fa fa-ban icon" aria-hidden="true" onclick="deleteItem(this)"></i>';
-
-        selectedValue.push(document.getElementById("pid"+rowNum).value);
-        console.log("selectedValue: ",selectedValue);
 
         document.getElementById("save").disabled = false;
     }

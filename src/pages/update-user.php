@@ -32,7 +32,7 @@
             if($stmt->execute()){
                 $lc=$status == 1?'admin-management.php':'massager-management.php';
                 echo "Update data success!";
-                header('Refresh:3;url='.$lc);
+                header('Refresh:5;url='.$lc);
             }else{
                 echo "ERROR: update data failed.".$sql."<br>".$mysqli->error;
                 header('Refresh:5;url='.$lc);

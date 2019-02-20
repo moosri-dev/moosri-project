@@ -93,7 +93,7 @@
                                     include('../config/connect-db.php');
                                     $sql= 'SELECT d.bk_id as bid, d.bk_fullname as fullname, d.bk_tel as tel
                                     , d.bk_line as bline, d.bk_time as startDate, d.bk_time_end as endDate
-                                    , u.user_id as uid, u.user_name as username, b.bk_name as bname 
+                                    , u.user_id as uid, u.user_name as username, b.bk_name as bname
                                             FROM hm_booking_details d INNER JOIN hm_booking b ON d.bk_id_fk = b.bk_id
                                             INNER JOIN hm_user u ON d.hm_user_id = u.user_id';
                                     
