@@ -4,8 +4,7 @@
         session_start(); 
     }
 
-    echo "ISSET : ".isset($_SESSION['user_id']);
-    if(isset($_SESSION['user_id']) && $_SESSION['status_id'] != 1){
+    if($_SESSION['status_id'] != 1){
         header('location: /moosri-project/');
     }
 ?>
@@ -24,11 +23,6 @@
                 ?>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                </li>
-                <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                </li>
-                <li class="divider"></li>
                 <li><a href="config/logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
@@ -79,6 +73,7 @@
                         </ul>
                     <!-- /.nav-second-level -->
                 </li>
+
                 <li>
                     <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลการขายสินค้า<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -94,6 +89,33 @@
                     </ul>
                 <!-- /.nav-second-level -->
                 </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-bath" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลรายการนวด<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="pages/booking-management.php"><i class="fa fa-street-view" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลรายการนวด</a>
+                        </li>
+                        <li>
+                            <a href="pages/add-booking.php"><i class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มรายการนวด</a>
+                        </li>
+                    </ul>
+                <!-- /.nav-second-level -->
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลการจอง<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="pages/booking-details-management.php"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลจองรายการนวด</a>
+                        </li>
+                        <li>
+                            <a href="pages/add-booking-details.php"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มข้อมูลการจอง</a>
+                        </li>
+                    </ul>
+                <!-- /.nav-second-level -->
+                </li>
+                
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

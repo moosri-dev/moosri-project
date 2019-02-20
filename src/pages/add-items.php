@@ -29,8 +29,7 @@
         $total = $_POST['total'];
         $detail =  $_POST['detail'];
         $sumTotal = 0;
-        $datum = new DateTime();
-        $createDate = $datum->format('Y-m-d H:i:s');
+        $createDate = $_POST['createDate'];
         $userId = $_SESSION['user_id'];
         foreach($total as $t){
             $sumTotal += $t;
@@ -99,10 +98,18 @@
                             <form method="post">
                                 <div class="form-group row">
                                     <div class="col-md-4 text-right">
-                                        <label for="inputUsername">รายละเอียดรายการสินค้า<span class="required">*</span> :</label>
+                                        <label for="inputDetails">รายละเอียดรายการสินค้า<span class="required">*</span> :</label>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" name="detail" class="form-control" placeholder='รายละเอียดรายการสินค้า' maxlength='50' required/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-right">
+                                        <label for="inputCreateDate">วันที่ขายสินค้า<span class="required">*</span> :</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="date" name="createDate" class="form-control" min="2019-01-01" max="2030-12-31" maxlength='50' onkeydown="return false" required/>
                                     </div>
                                 </div>
                                 <div class="content">
@@ -172,11 +179,23 @@
     var table = document.getElementById("myTable");
     var rowNum = 0;
     var optionsAsString = "";
-
+    var selectedValue = new Array();
     for(var i = 0; i < pid.length; i++) {
         optionsAsString += "<option value='" + pid[i] + "'>" + pname[i] + "</option>";
     }
     function addItem(){
+        if(table.rows.length > pid.length){
+            return false;
+        }
+        for(var i=0;i<selectedValue.legnth;i++){
+            optionsAsString = "";
+            for(var j=0;j<pid.length;j++){
+                if(selectedValue[i] != pid[j]){
+                    console.log("selectedValue",selectedValue);
+                    optionsAsString += "<option value='" + pid[j] + "'>" + pname[j] + "</option>";
+                }
+            }
+        }
         let row = table.insertRow();
         row.className = "text-center";
         row.setAttribute("id",rowNum);
@@ -190,13 +209,16 @@
         ++rowNum;
         sequence.setAttribute("style","line-height: 35px;");   
         sequence.innerHTML = rowNum;
-        productName.innerHTML = '<select name="pid[]" class="custom-select" onchange="selectChangeValue(this)" required>'+optionsAsString+'</select>';
+        productName.innerHTML = '<select name="pid[]" id="pid'+rowNum+'" class="custom-select" onchange="selectChangeValue(this)" required>'+optionsAsString+'</select>';
         quantity.innerHTML = '<input type="number" name="unit[]" id="unit" class="form-control" value="1" onchange="changeValue(this)" onkeyup="myKeyChange(event,this)" min="1" max="'+amount[0]+'" required>';
         price.innerHTML = '<input type="number" name="price[]" id="price" class="form-control" value="'+priceValue[0]+'" readonly required>';
         total.innerHTML = '<input type="number" name="total[]" id="total" class="form-control" value="'+priceValue[0]+'" readonly required>';
 
         del.setAttribute("style","line-height: 35px;");   
         del.innerHTML = '<i class="fa fa-ban icon" aria-hidden="true" onclick="deleteItem(this)"></i>';
+
+        selectedValue.push(document.getElementById("pid"+rowNum).value);
+        console.log("selectedValue: ",selectedValue);
 
         document.getElementById("save").disabled = false;
     }
