@@ -1,7 +1,7 @@
 <?php 
     include('../config/connect-db.php');
     
-    $bid = $_POST['id'];
+    $bid = $_REQUEST['id'];
     $sql = "DELETE FROM hm_booking_details WHERE bk_id = ?";
    
     /* create a prepared statement */

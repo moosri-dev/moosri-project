@@ -4,11 +4,11 @@ include "../config/connect-db.php";
 
 // if (isset($_POST['search'])) {
 
-$stmt = $mysqli->prepare("SELECT * FROM hm_booking_details");
+$stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id");
 $stmt->execute();
 $rs = $stmt->get_result();
 
-if (isset($_GET['searchBtn'])) {
+if (!empty($_GET['searchBtn'])) {
     $search = "%{$_GET['srcTxt']}%";
     $sql2 = "SELECT * FROM hm_booking_details WHERE user_name LIKE ?";
     $stmt2 = $mysqli->prepare($sql2);
@@ -41,8 +41,9 @@ if (isset($_GET['searchBtn'])) {
                     <div class="row" style="margin:5% 0% 2% 0%;">
                         <div class="col-md-12 form-group">
                             <h4 for="search">
-                            <i class="fas fa-glasses"></i>&nbsp;&nbsp;รายการนวดทั้งหมด</h4>
-                            <input autocomplete="off" type="text" class="form-control form-control-md" name="srcTxt" id="srcTxt" placeholder="นางสางขยันนวด ทุกวัน">
+                                <i class="fas fa-glasses"></i>&nbsp;&nbsp;รายการนวดทั้งหมด</h4>
+                            <input autocomplete="off" type="text" class="form-control form-control-md" name="srcTxt"
+                                id="srcTxt" placeholder="นางสางขยันนวด ทุกวัน" required>
                             <small id="helpId" class="form-text text-muted">ค้นหาหมอนวดจาก ชื่อ,นามสกุล ลูกค้า</small>
                             <button type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" btn-md
                                 btn-block>
@@ -56,10 +57,13 @@ if (isset($_GET['searchBtn'])) {
                         <tr class="text-center">
                             <th scope="col">ลำดับ</th>
                             <th>ชื่อ-นามสกุล</th>
+                            <th>จองบริการ</th>
                             <th>เบอร์โทร</th>
                             <th>ไลน์ ไอดี</th>
+                            <th>วันเดือนปี</th>
                             <th>เวลาเริ่ม</th>
                             <th>เวลาสิ้นสุด</th>
+                            <th>ดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,10 +71,16 @@ if (isset($_GET['searchBtn'])) {
                         <tr>
                             <td class="text-center"><?=$i;?></td>
                             <td scope="row"><?=$row['bk_fullname']?></td>
-                            <td><?=$row['bk_tel']?></td>
+                            <td><?=$row['bk_name']?></td>
+                            <td class="text-center"><?=$row['bk_tel']?></td>
                             <td class="text-center"><?=$row['bk_line']?></td>
-                            <td class="text-center"><?=substr($row['bk_time'],0,5)?></td>
-                            <td class="text-center"><?=substr($row['bk_time_end'],0,5)?></td>
+                            <td class="text-center"><?=$row['bk_date']?></td>
+                            <td class="text-center"><?=substr($row['bk_time'], 0, 5)?></td>
+                            <td class="text-center"><?=substr($row['bk_time_end'], 0, 5)?></td>
+                            <td class="text-center">
+                                <a href="booking_edit.php?eid=<?=$row['bk_id']?>"><i class="far fa-edit"></i></a>&nbsp;&nbsp;
+                                <a href="delete-booking-details.php?id=<?=$row['bk_id']?>"><i class="far fa-bell-slash"></i></a>
+                            </td>
                         </tr>
                         <?php $i++;}?>
                     </tbody>

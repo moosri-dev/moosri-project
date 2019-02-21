@@ -13,6 +13,17 @@ $ms = $mysqli->prepare("SELECT * FROM hm_booking");
 $ms->execute();
 $list = $ms->get_result();
 
+//select by id eid
+$sql = "SELECT * FROM hm_booking_details WHERE bk_id = ?";
+if ($sQuery = $mysqli->prepare($sql)) {
+    $sQuery->bind_param('i', $_GET['eid']);
+    $sQuery->execute();
+    $resultQuery = $sQuery->get_result();
+    $sRow = $resultQuery->fetch_array(MYSQLI_ASSOC);
+} else {
+    echo "Error:" . $sql . "<br>" . $mysqli->error;
+}
+
 //add data booking
 if (isset($_POST['save'])) {
     $name = $_POST['username'];
@@ -30,22 +41,33 @@ if (isset($_POST['save'])) {
     $list2 = $ms2->get_result();
 
     //check ก่อนว่า หมอนวดที่ถูกจอง ว่าเวลานี้ไหม
-    if ($qry = $mysqli->prepare("SELECT bk.*, ur.* FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE  bk_time_end <= ? AND bk.hm_user_id = ?")) {
-        $qry->bind_param('si', $timeE, $empid);
+    if ($qry = $mysqli->prepare("SELECT bk.*, ur.* FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE  bk_time_end <= ? AND bk.hm_user_id = ? AND bk.bk_id =?")) {
+        $qry->bind_param('sii', $timeE, $empid, $_GET['eid']);
         $qry->execute();
         $listChk = $qry->get_result();
 
-        if ($listChk->num_rows != 0) {
-            // echo "<script>alert('No');</script>";
-        } else {
+        if ($listChk->num_rows == 1) { //เช็คว่า ผู้ใช้งานคนนี้ กำลังจองหมอนวดคนนี้อยู่
             //Insert ข้อมูลลงดาต้าเบส
-            $sql = "INSERT INTO hm_booking_details(bk_fullname, bk_tel, bk_line, bk_id_fk, hm_user_id, bk_time,bk_time_end,bk_date) VALUES(?,?,?,?,?,?,?,?)";
+            $sql = "UPDATE hm_booking_details SET bk_fullname =? , bk_tel =?, bk_line =?, bk_id_fk =?, hm_user_id =?, bk_time =?,bk_time_end =?,bk_date =? WHERE bk_id = ?";
             if ($q = $mysqli->prepare($sql)) {
-                $q->bind_param('sssiisss', $name, $tel, $line, $bkid, $empid, $timeS, $timeE, $date);
+                $q->bind_param('sssiisssi', $name, $tel, $line, $bkid, $empid, $timeS, $timeE, $date, $_GET['eid']);
                 $q->execute();
+
+                //Select อีกครั้ง เพื่อดึงข้อมูลล่าสุด
+                $sql = "SELECT * FROM hm_booking_details WHERE bk_id = ?";
+                if ($sQuery = $mysqli->prepare($sql)) {
+                    $sQuery->bind_param('i', $_GET['eid']);
+                    $sQuery->execute();
+                    $resultQuery = $sQuery->get_result();
+                    $sRow = $resultQuery->fetch_array(MYSQLI_ASSOC);
+                } else {
+                    echo "Error:" . $sql . "<br>" . $mysqli->error;
+                }
             } else {
                 echo "Error:" . $sql . "<br>" . $mysqli->error;
             }
+        } else {
+            echo "<script>alert('ขอภัยค่ะ หมอนวดคนนี้กำลังอยู่ในช่วงเวลาบริการค่ะ กรุณาเลือกหมอนวดใหม่');</script>";
         }
     }
     $mysqli->close();
@@ -169,35 +191,35 @@ if (!empty($_POST['srchTime'])) {
                 <form method="post">
                     <div class="wrap-login100">
                         <span class="login100-form-title">
-                            <i class="fas fa-bell"></i>
-                            จองคิวนวด
+                        <i class="fas fa-user-edit"></i>
+                            แก้ไขการจองคิวนวด
                         </span>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="username">ชื่อ-สกุล</label>
                             <input autocomplete="false" class="form-control" type="text" name="username"
-                                placeholder="ชื่อ-นามสกุล สำหรับการจอง" required>
+                                placeholder="ชื่อ-นามสกุล สำหรับการจอง" value="<?=$sRow['bk_fullname'];?>">
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="tel">เบอร์โทร</label>
-                            <input class="form-control" type="text" placeholder="เบอร์โทร" name="tel" required>
+                            <input class="form-control" type="text" placeholder="เบอร์โทร" name="tel" value="<?=$sRow['bk_tel'];?>">
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="email">ไลน์</label>
                             <input autocomplete="false" class="form-control" type="text" name="line"
-                                placeholder="ไลน์ ID" required>
+                                placeholder="ไลน์ ID" value="<?=$sRow['bk_line'];?>">
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="status">เลือกบริการ</label>
-                            <select class="custom-select" id="bkid" name="bkid" required>
+                            <select class="custom-select" id="bkid" name="bkid">
                                 <option value="0">เลือกบริการ</option>
                                 <?php while ($rs = $list->fetch_assoc()) {?>
-                                <option value="<?=$rs['bk_id']?>"><?=$rs['bk_name'] . ' ' . $rs['bk_detail']?></option>
+                                <option value="<?=$rs['bk_id']?>" <?=($sRow['bk_id_fk'] == $rs['bk_id'] ? 'selected' : '');?>><?=$rs['bk_name'] . ' ' . $rs['bk_detail']?></option>
                                 <?php }?>
                             </select>
                             <span class="focus-input100-1"></span>
@@ -205,10 +227,10 @@ if (!empty($_POST['srchTime'])) {
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-8" for="status">เลือกรับบริการจากหมอนวด</label>
-                            <select class="custom-select" name="empid" id="empid" required>
+                            <select class="custom-select" name="empid" id="empid">
                                 <option value="0">รายชื่อหมอนวด</option>
                                 <?php while ($data = $r->fetch_assoc()) {?>
-                                <option value="<?=$data['user_id']?>"><?=$data['user_name']?></option>
+                                <option value="<?=$data['user_id']?>" <?=($sRow['hm_user_id'] == $data['user_id'] ? 'selected' : '')?>><?=$data['user_name']?></option>
                                 <?php }?>
                             </select>
                             <span class="focus-input100-1"></span>
@@ -217,13 +239,13 @@ if (!empty($_POST['srchTime'])) {
                         <div class="wrap-input100 form-group">
                             <label class="col-md-4" for="time">วันที่จอง</label>
                             <input type="text" autocomplete="off" name="bk_date" id="datepicker" data-date-format="DD MMMM YYYY"
-                                class="form-control" required>
+                                class="form-control" value="<?=$sRow['bk_date']?>">
                         </div>
                         <div class="wrap-input100 validate-input form-group">
                             <label class="col-md-4" for="time">ช่วงเวลา</label>
-                            <input class="form-control" type="time" name="timeStart" id="timeStart" required>
+                            <input class="form-control" type="time" name="timeStart" id="timeStart" value="<?=$sRow['bk_time']?>">
                             <label class="col-md-4" for="time">ถึง</label>
-                            <input class="form-control" type="time" name="timeEnd" id="timeEnd" required>
+                            <input class="form-control" type="time" name="timeEnd" id="timeEnd" value="<?=$sRow['bk_time_end']?>">
                         </div>
                         <div class="container-login100-form-btn m-t-20">
                             <button class="login100-form-btn btn btn-primary" type="submit" name="save">
