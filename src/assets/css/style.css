@@ -13,6 +13,16 @@
 	--brown-color-base: #a52a2a;
 }
 
+[type="date"] {
+  background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
 
 body{
 	font-family: var(--font-family-base);
@@ -20,6 +30,9 @@ body{
 	font-size: var(--font-size-base);
 }
 
+.f-bold{
+	font-weight: var(--font-weight-bold-base);
+}
 .margin-top-80{
 	margin-top: 80px;
 }
@@ -32,7 +45,6 @@ body{
 .bg-dark-green{
 	background-color: #56482c;
 }
-
 .my-card{
 	position: relative;
 }
@@ -59,4 +71,211 @@ body{
 	width: 180px;
 	height: 60px;
 	background-color: var(--brown-color-base);
+}
+.carousel_c{
+	width: 100%;
+  	height: auto;
+}
+.footerpage{
+	padding-top: 60px;
+}
+.h2Topic{
+	text-align: center;
+	margin-top: 20px;
+}
+
+.underline_c{
+	border:3px solid pink;
+	width:530px;
+}
+.underline_c_sub{
+	border:3px solid pink;
+	width:330px;
+	margin-left: -1px;
+}
+.story{
+	margin-top: 5%;
+}
+.img_c{
+	border-radius: 50%;
+	margin-top:20%;
+}
+.r1{
+	margin-left: 70px;
+}
+.btnChoose{
+	margin-left: 100px;
+}
+.required{
+	color: red;
+	font-size: 16px;
+}
+
+
+.input-file-container {
+	position: relative;
+	text-align: center;
+	border-radius: 10px;
+  } 
+  .js .input-file-trigger {
+	display: block;
+	padding: 14px 45px;
+	background: turquoise;
+	color: #fff;
+	font-size: 1em;
+	transition: all .4s;
+	cursor: pointer;
+	border-radius: 5px;
+  }
+  .js .input-file {
+	position: absolute;
+	top: 0; left: 0;
+	width: 225px;
+	opacity: 0;
+	padding: 14px 0;
+	cursor: pointer;
+  }
+  .js .input-file:hover + .input-file-trigger,
+  .js .input-file:focus + .input-file-trigger,
+  .js .input-file-trigger:hover,
+  .js .input-file-trigger:focus {
+	background: #34495E;
+	color: #39D2B4;
+  }
+  
+  .file-return {
+	margin: 0;
+  }
+  .file-return:not(:empty) {
+	margin: 1em 0;
+  }
+  .js .file-return {
+	font-style: italic;
+	font-size: .9em;
+	font-weight: bold;
+  }
+  .js .file-return:not(:empty):before {
+	content: "Selected file: ";
+	font-style: normal;
+	font-weight: normal;
+	}
+	
+	footer {
+    position: fixed;
+    height: 60px;
+    bottom: 0;
+		width: 100%;
+		margin-top: 2%;
+}
+
+.nav-container{
+	background-color: #fff;
+	border-bottom: 1px solid beige;
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+.sidebar{
+	position: fixed;
+	height: 100%;
+	margin: unset;
+	background: #fff;
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+.siderbar.header{
+	padding: 10px 20px;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+.sidebar-nav a{
+	color: hotpink;
+	font-size: 15px;
+}
+.sidebar-nav a i{
+	font-size: 20px;
+	color: aqua;
+}
+.sidebar ul li a.active {
+	background-color: lightsteelblue;
+	color: #fff;
+}
+.sidebar ul li a:hover {
+	background-color: lightsteelblue;
+	color: #fff;
+}
+
+.image.profile{
+	width: 130px;
+	height: 130px;
+	border: 1px solid;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+.profile{
+	font-weight: var(--font-weight-bold-base);
+	color: darkorange;
+}
+.image-profile{
+	width: 30px;
+	border-radius: 50%;
+}
+.item.image{
+	width: 60px;
+	height: 60px;
+}
+#page-wrapper{
+	background-color: unset;
+	margin-top: 75px;
+}
+.page-header{
+	padding: 20px;
+	font-size: 16px;
+	border: unset;
+	background: #fff;
+	margin-top: 0px;
+}
+.sub-header{
+	background: #fff;
+	margin: 0px -30px;
+}
+#myTable>thead{
+	font-size: 14px;
+}
+#myTable th{
+	text-align: center;
+}
+#myTable>tbody{
+	font-size: 13px;
+}
+.icon:hover{
+	cursor: pointer;
+}
+.panel{
+	box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+td>select{
+	width: 100%;
+	border-radius: 4px;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	height: 34px;
+}
+td>input{
+	text-align: center;
+}
+.form-control[readonly]{
+	background: #fff;
+}
+.table#myTable{
+	margin-bottom: 10px;
+}
+.footer{
+	text-align: center;
+}
+.footer>button{
+	width: 40%;
+}
+tr.click-me:hover{
+	cursor: pointer;
+	background-color: springgreen !important;
+	color:#fff;
 }
