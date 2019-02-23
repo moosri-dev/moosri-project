@@ -4,7 +4,7 @@ include "../config/connect-db.php";
 
 // if (isset($_POST['search'])) {
 
-$stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id");
+$stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id ORDER BY bk.bk_time");
 $stmt->execute();
 $rs = $stmt->get_result();
 
@@ -63,6 +63,7 @@ if (!empty($_GET['searchBtn'])) {
                             <th>วันเดือนปี</th>
                             <th>เวลาเริ่ม</th>
                             <th>เวลาสิ้นสุด</th>
+                            <th>เวลาที่เหลือเข้ารับบริการ</th>
                             <th>ดำเนินการ</th>
                         </tr>
                     </thead>
@@ -77,6 +78,11 @@ if (!empty($_GET['searchBtn'])) {
                             <td class="text-center"><?=$row['bk_date']?></td>
                             <td class="text-center"><?=substr($row['bk_time'], 0, 5)?></td>
                             <td class="text-center"><?=substr($row['bk_time_end'], 0, 5)?></td>
+                            <?php if ($row['hour'] == 0 &&  $row['timer'] < 30) {?>
+                            <td class="text-center" style="color:red"><?=$row['hour'] .' ชั่วโมง '. $row['timer'] .' นาที'?></td>
+                            <?php } else {?>
+                                <td class="text-center"><?=$row['hour'] .' ชั่วโมง '. $row['timer'] .' นาที'?></td>
+                            <?php }?>
                             <td class="text-center">
                                 <a href="booking_edit.php?eid=<?=$row['bk_id']?>"><i class="far fa-edit"></i></a>&nbsp;&nbsp;
                                 <a href="delete-booking-details.php?id=<?=$row['bk_id']?>"><i class="far fa-bell-slash"></i></a>
