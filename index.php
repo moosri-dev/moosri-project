@@ -7,7 +7,7 @@
 
 <head>
     <!-- <meta http-equiv="refresh" content="0;url="> -->
-    <title>SB Admin 2 XX</title>
+    <title>ศูนย์นวดแผนไทย ตำบลหมู่สี</title>
     <!--    Style Sheet -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
