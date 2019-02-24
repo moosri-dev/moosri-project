@@ -3,10 +3,14 @@ if (!isset($_SESSION)) {session_start();}
 include "../config/connect-db.php";
 
 // if (isset($_POST['search'])) {
-
-$stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id ORDER BY bk.bk_time");
+//select status = 1
+$stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id WHERE CURRENT_TIME() < bk.bk_time AND bk.status = 1 ORDER BY bk.bk_time");
 $stmt->execute();
 $rs = $stmt->get_result();
+//select status = 2
+$stm2 = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id WHERE CURRENT_TIME() < bk.bk_time AND bk.status = 2 ORDER BY bk.bk_time");
+$stm2->execute();
+$rs2 = $stm2->get_result();
 
 if (!empty($_GET['searchBtn'])) {
     $search = "%{$_GET['srcTxt']}%";
@@ -78,20 +82,74 @@ if (!empty($_GET['searchBtn'])) {
                             <td class="text-center"><?=$row['bk_date']?></td>
                             <td class="text-center"><?=substr($row['bk_time'], 0, 5)?></td>
                             <td class="text-center"><?=substr($row['bk_time_end'], 0, 5)?></td>
-                            <?php if ($row['hour'] == 0 &&  $row['timer'] < 30) {?>
-                            <td class="text-center" style="color:red"><?=$row['hour'] .' ชั่วโมง '. $row['timer'] .' นาที'?></td>
+                            <?php if ($row['hour'] == 0 && $row['timer'] < 30) {?>
+                            <td class="text-center" style="color:red">
+                                <?=$row['hour'] . ' ชั่วโมง ' . $row['timer'] . ' นาที'?></td>
                             <?php } else {?>
-                                <td class="text-center"><?=$row['hour'] .' ชั่วโมง '. $row['timer'] .' นาที'?></td>
+                            <td class="text-center"><?=$row['hour'] . ' ชั่วโมง ' . $row['timer'] . ' นาที'?></td>
                             <?php }?>
                             <td class="text-center">
-                                <a href="booking_edit.php?eid=<?=$row['bk_id']?>"><i class="far fa-edit"></i></a>&nbsp;&nbsp;
-                                <a href="delete-booking-details.php?id=<?=$row['bk_id']?>"><i class="far fa-bell-slash"></i></a>
+                                <a href="booking_edit.php?eid=<?=$row['bk_id']?>"><i
+                                        class="far fa-edit"></i></a>&nbsp;&nbsp;
+                                <a href="delete-booking-details.php?id=<?=$row['bk_id']?>"><i
+                                        class="far fa-bell-slash"></i></a>
                             </td>
                         </tr>
                         <?php $i++;}?>
+                        <tr class="text-right">
+                            <td colspan="10">
+                                <button type="button" id="btnNotify" class="btn btn-primary">ส่งข้อความแจ้งเตือน</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <!-- </div> -->
+            </div><!-- close table 1 -->
+            <div class="col-md-12 card_search">
+                <form action="#" method="post" name="actButton">
+                    <h4 for="search"><i class="fas fa-sms"></i>&nbsp;&nbsp;รายการนวดที่ส่งข้อความบริการแล้วทั้งหมด</h4>
+                    <table class="table table-bordered">
+                        <thead class="table-danger">
+                            <tr class="text-center">
+                                <th scope="col">ลำดับ</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>จองบริการ</th>
+                                <th>เบอร์โทร</th>
+                                <th>ไลน์ ไอดี</th>
+                                <th>วันเดือนปี</th>
+                                <th>เวลาเริ่ม</th>
+                                <th>เวลาสิ้นสุด</th>
+                                <th>เวลาที่เหลือเข้ารับบริการ</th>
+                                <th>ดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php $i = 1;while ($row2 = $rs2->fetch_assoc()) {?>
+                        <tr>
+                            <td class="text-center"><?=$i;?></td>
+                            <td scope="row"><?=$row2['bk_fullname']?></td>
+                            <td><?=$row2['bk_name']?></td>
+                            <td class="text-center"><?=$row2['bk_tel']?></td>
+                            <td class="text-center"><?=$row2['bk_line']?></td>
+                            <td class="text-center"><?=$row2['bk_date']?></td>
+                            <td class="text-center"><?=substr($row2['bk_time'], 0, 5)?></td>
+                            <td class="text-center"><?=substr($row2['bk_time_end'], 0, 5)?></td>
+                            <?php if ($row2['hour'] == 0 && $row2['timer'] < 30) {?>
+                            <td class="text-center" style="color:red">
+                                <?=$row2['hour'] . ' ชั่วโมง ' . $row2['timer'] . ' นาที'?></td>
+                            <?php } else {?>
+                            <td class="text-center"><?=$row2['hour'] . ' ชั่วโมง ' . $row2['timer'] . ' นาที'?></td>
+                            <?php }?>
+                            <td class="text-center">
+                                <a href="booking_edit.php?eid=<?=$row2['bk_id']?>"><i
+                                        class="far fa-edit"></i></a>&nbsp;&nbsp;
+                                <a href="delete-booking-details.php?id=<?=$row2['bk_id']?>"><i
+                                        class="far fa-bell-slash"></i></a>
+                            </td>
+                        </tr>
+                        <?php $i++;}?>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
@@ -109,5 +167,29 @@ if (!empty($_GET['searchBtn'])) {
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
 </script>
 <!-- <script language="javascript"> window.location.href = "src/pages/index.php"</script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert"></script> -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+$(document).ready(function () {
+    $('#btnNotify').on('click',function(){
+        $.ajax({
+            type: "get",
+            url: "../config/auto_notify.php",
+            success: function (response) {
+                swal({
+                    text:'ส่งข้อความแจ้งเตือนเรียบร้อยแล้วค่ะ',
+                    icon: "success",
+                })
+            },
+            error:function(err){
+                swal({
+                    text:'ไม่พบข้อมูลที่ต้องแจ้งเตือน',
+                    icon: "warning",
+                })
+            }
+        });
+    });
+});
+</script>
 
 </html>

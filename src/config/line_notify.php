@@ -21,11 +21,11 @@ $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorizat
 curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
 //RETURN
 curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1);
-$result = curl_exec( $chOne );
+$result = curl_exec($chOne);
 //Check error
 if(curl_error($chOne)) { echo 'error:' . curl_error($chOne); }
 else { $result_ = json_decode($result, true);
-echo "status : ".$result_['status']; echo "message : ". $result_['message']; }
+echo "<br>status : ".$result_['status']; echo "<br>message : ". $result_['message']; }
 //Close connect
 curl_close( $chOne );
 

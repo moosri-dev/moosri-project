@@ -21,10 +21,13 @@
 </div>
 <hr>
 <div class="row">
+    <!-- Block 1 -->
     <div class="container">
         <div>
             <p>
-                <h4 class="text-center">รูปแบบการบริการ</h4>
+                <h4 class="text-center topic_h"
+                    style="background: pink;margin-left:5%;width:250px;height:40px;padding-top:3px;border: 1px solid pink">
+                    รูปแบบการบริการ</h4>
             </p>
         </div>
         <div class="row">
@@ -34,7 +37,6 @@
                     <h5 class="card-title">นวดออยล์ อโรมา</h5>
                     <p class="card-text">1.5 ชั่วโมง</p>
                     <p class="card-text">400 บาท</p>
-                    <a href="#" class="btn btn-primary">เลือก</a>
                 </div>
             </div>
             <div class="r1 card" style="width: 18rem;">
@@ -43,7 +45,6 @@
                     <h5 class="card-title">นวดไทย</h5>
                     <p class="card-text">2 ชั่วโมง</p>
                     <p class="card-text">300 บาท</p>
-                    <a href="#" class="btnChoose btn btn-primary">เลือก</a>
                 </div>
             </div>
             <div class="r1 card" style="width: 18rem;">
@@ -52,7 +53,6 @@
                     <h5 class="card-title">นวดเท้า</h5>
                     <p class="card-text">1.5 ชั่วโมง</p>
                     <p class="card-text">300 บาท</p>
-                    <a href="#" class="btnChoose btn btn-primary">เลือก</a>
                 </div>
             </div>
         </div>
@@ -63,7 +63,6 @@
                     <h5 class="card-title">นวดไทย - น้ำมัน</h5>
                     <p class="card-text">2 ชั่วโมง</p>
                     <p class="card-text">400 บาท</p>
-                    <a href="#" class="btnChoose btn btn-primary">เลือก</a>
                 </div>
             </div>
             <div class="r1 card" style="width: 18rem;">
@@ -73,8 +72,76 @@
                     <h5 class="card-title">นวดไทยนอกสถานที่</h5>
                     <p class="card-text">2 ชั่วโมง</p>
                     <p class="card-text">600 บาท</p>
-                    <a href="#" class="btnChoose btn btn-primary">เลือก</a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block 2 -->
+    <div class="container">
+        <div>
+            <p>
+                <h4 class="text-center topic_h"
+                    style="background: pink;margin-left:5%;width:250px;height:40px;padding-top:3px;border: 1px solid pink">
+                    สินค้าของร้านเรา</h4>
+            </p>
+        </div>
+        <div class="row">
+            <?php 
+            include("src/config/connect-db.php");
+            $sql = "SELECT * FROM hm_product";
+            if ($sQuery = $mysqli->prepare($sql)) {
+                $sQuery->execute();
+                $result=$sQuery->get_result();
+                while($rs=$result->fetch_object()){
+            ?>
+            <div class="r1 card" style="width: 18rem;padding:10px 0px 30px 0px ;">
+                <img class="card-img-top" style="height:190px;" src="src/uploads/<?=$rs->product_img?>"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><?= $rs->product_name?></h5>
+                    <p class="card-text"><?= $rs->product_detail?></p>
+                    <p class="card-text">ราคา <?= $rs->product_price?> บาท</p>
+                </div>
+            </div>
+                <?php } } ?>
+        </div>
+    </div>
+    <!-- Block 3 -->
+    <div class="container" style="margin-bottom: 150px;">
+        <div>
+            <p>
+                <h4 class="text-center topic_h"
+                    style="background: pink;margin-left:5%;width:250px;height:40px;padding-top:3px;border: 1px solid pink">
+                    โปรโมชั่น</h4>
+            </p>
+        </div>
+        <div>
+        <div style="margin-left:50px;" id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="carousel_c d-block w-100" src="https://letsrelaxspa.com/wp-content/uploads/2018/07/Hand-Cream-5free1-TH.jpg?_t=1531792023" alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="carousel_c d-block w-100" src="https://letsrelaxspa.com/wp-content/uploads/2018/12/TH-04-1.jpg?_t=1550114117" alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="carousel_c d-block w-100" src="https://letsrelaxspa.com/wp-content/uploads/2018/07/Cash-Card-TH.jpg" alt="Third slide">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
         </div>
     </div>

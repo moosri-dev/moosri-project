@@ -2,7 +2,7 @@
     include('../config/connect-db.php');
     
     $bid = $_REQUEST['id'];
-    $sql = "DELETE FROM hm_booking_details WHERE bk_id = ?";
+    $sql = "UPDATE hm_booking_details tbk SET tbk.status = '0' WHERE bk_id = ?";
    
     /* create a prepared statement */
     if($stmt = $mysqli->prepare($sql)){
