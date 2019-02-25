@@ -7,6 +7,7 @@ include "../config/connect-db.php";
 $stmt = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id WHERE CURRENT_TIME() < bk.bk_time AND bk.status = 1 ORDER BY bk.bk_time");
 $stmt->execute();
 $rs = $stmt->get_result();
+$num = $rs->num_rows;
 //select status = 2
 $stm2 = $mysqli->prepare("SELECT bk.*,mbk.bk_name,MOD(HOUR(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as hour,MOD(MINUTE(TIMEDIFF(bk.bk_time, CURRENT_TIME())),60) as timer FROM hm_booking_details bk INNER JOIN hm_booking mbk ON bk.bk_id_fk = mbk.bk_id WHERE CURRENT_TIME() < bk.bk_time AND bk.status = 2 ORDER BY bk.bk_time");
 $stm2->execute();
@@ -68,7 +69,7 @@ if (!empty($_GET['searchBtn'])) {
                             <th>เวลาเริ่ม</th>
                             <th>เวลาสิ้นสุด</th>
                             <th>เวลาที่เหลือเข้ารับบริการ</th>
-                            <th>ดำเนินการ</th>
+                            <!-- <th>ดำเนินการ</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -88,18 +89,24 @@ if (!empty($_GET['searchBtn'])) {
                             <?php } else {?>
                             <td class="text-center"><?=$row['hour'] . ' ชั่วโมง ' . $row['timer'] . ' นาที'?></td>
                             <?php }?>
-                            <td class="text-center">
+                            <!-- <td class="text-center">
                                 <a href="booking_edit.php?eid=<?=$row['bk_id']?>"><i
                                         class="far fa-edit"></i></a>&nbsp;&nbsp;
                                 <a href="delete-booking-details.php?id=<?=$row['bk_id']?>"><i
                                         class="far fa-bell-slash"></i></a>
-                            </td>
+                            </td> -->
                         </tr>
                         <?php $i++;}?>
                         <tr class="text-right">
+                        <?php if($num != 0){?>
                             <td colspan="10">
                                 <button type="button" id="btnNotify" class="btn btn-primary">ส่งข้อความแจ้งเตือน</button>
                             </td>
+                        <?php }else{ ?>
+                            <td colspan="10">
+                                <button disabled type="button" id="btnNotify" class="btn btn-primary">ส่งข้อความแจ้งเตือน</button>
+                            </td>
+                        <?php } ?>
                         </tr>
                     </tbody>
                 </table>
@@ -119,7 +126,7 @@ if (!empty($_GET['searchBtn'])) {
                                 <th>เวลาเริ่ม</th>
                                 <th>เวลาสิ้นสุด</th>
                                 <th>เวลาที่เหลือเข้ารับบริการ</th>
-                                <th>ดำเนินการ</th>
+                                <!-- <th>ดำเนินการ</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -139,12 +146,12 @@ if (!empty($_GET['searchBtn'])) {
                             <?php } else {?>
                             <td class="text-center"><?=$row2['hour'] . ' ชั่วโมง ' . $row2['timer'] . ' นาที'?></td>
                             <?php }?>
-                            <td class="text-center">
+                            <!-- <td class="text-center">
                                 <a href="booking_edit.php?eid=<?=$row2['bk_id']?>"><i
                                         class="far fa-edit"></i></a>&nbsp;&nbsp;
                                 <a href="delete-booking-details.php?id=<?=$row2['bk_id']?>"><i
                                         class="far fa-bell-slash"></i></a>
-                            </td>
+                            </td> -->
                         </tr>
                         <?php $i++;}?>
                         </tbody>

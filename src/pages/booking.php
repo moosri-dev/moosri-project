@@ -3,7 +3,7 @@ if (!isset($_SESSION)) {session_start();}
 include "../config/connect-db.php";
 
 //select user all
-$stmt = $mysqli->prepare("SELECT * FROM hm_user");
+$stmt = $mysqli->prepare("SELECT * FROM hm_user WHERE status_id != 1");
 $stmt->execute();
 $r = $stmt->get_result();
 $countAll = $r->num_rows;
@@ -12,7 +12,7 @@ $countAll = $r->num_rows;
 $ms = $mysqli->prepare("SELECT * FROM hm_booking");
 $ms->execute();
 $list = $ms->get_result();
-
+$n = 0;
 //add data booking
 if (isset($_POST['save'])) {
     $name = $_POST['username'];
@@ -22,7 +22,11 @@ if (isset($_POST['save'])) {
     $empid = $_POST['empid'];
     $timeS = $_POST['timeStart'];
     $timeE = $_POST['timeEnd'];
-    $date = $_POST['bk_date'];
+    $gDate = $_POST['bk_date'];
+    $d = substr($gDate,0,2);
+    $m = substr($gDate,3,2);
+    $y = substr($gDate,6,5);
+    $date = $y.'-'.$m.'-'.$d;
     //หาเวลาที่นวดตาม ชั่วโมงบริการ
     $ms2 = $mysqli->prepare("SELECT bk_time FROM hm_booking WHERE bk_id = ?");
     $ms2->bind_param("i", $bkid);
@@ -34,14 +38,14 @@ if (isset($_POST['save'])) {
         $qry->bind_param('si', $timeE, $empid);
         $qry->execute();
         $listChk = $qry->get_result();
-
         if ($listChk->num_rows != 0) {
-            // echo "<script>alert('No');</script>";
+            $n = $listChk->num_rows;
         } else {
             //Insert ข้อมูลลงดาต้าเบส
-            $sql = "INSERT INTO hm_booking_details(bk_fullname, bk_tel, bk_line, bk_id_fk, hm_user_id, bk_time,bk_time_end,bk_date) VALUES(?,?,?,?,?,?,?,?)";
+            $sts = 1;
+            $sql = "INSERT INTO hm_booking_details(bk_fullname, bk_tel, bk_line, bk_id_fk, hm_user_id, bk_time,bk_time_end,bk_date,status) VALUES(?,?,?,?,?,?,?,?,?)";
             if ($q = $mysqli->prepare($sql)) {
-                $q->bind_param('sssiisss', $name, $tel, $line, $bkid, $empid, $timeS, $timeE, $date);
+                $q->bind_param('sssiisssi', $name, $tel, $line, $bkid, $empid, $timeS, $timeE, $date, $sts);
                 $q->execute();
             } else {
                 echo "Error:" . $sql . "<br>" . $mysqli->error;
@@ -174,20 +178,20 @@ if (!empty($_POST['srchTime'])) {
                         </span>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="username">ชื่อ-สกุล</label>
-                            <input autocomplete="false" class="form-control" type="text" name="username"
+                            <input autocomplete="off" class="form-control" type="text" name="username" id="username"
                                 placeholder="ชื่อ-นามสกุล สำหรับการจอง" required>
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="tel">เบอร์โทร</label>
-                            <input class="form-control" type="text" placeholder="เบอร์โทร" name="tel" required>
+                            <input class="form-control" type="text" autocomplete="off" placeholder="เบอร์โทร" name="tel" id="tel" required>
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="email">ไลน์</label>
-                            <input autocomplete="false" class="form-control" type="text" name="line"
+                            <input autocomplete="off" class="form-control" type="text" name="line" id="line"
                                 placeholder="ไลน์ ID" required>
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
@@ -226,7 +230,7 @@ if (!empty($_POST['srchTime'])) {
                             <input class="form-control" type="time" name="timeEnd" id="timeEnd" required>
                         </div>
                         <div class="container-login100-form-btn m-t-20">
-                            <button class="login100-form-btn btn btn-primary" type="submit" name="save">
+                            <button class="login100-form-btn btn btn-primary" type="submit" name="save" id="btnBooking">
                                 <i class="far fa-check-circle"></i>
                                 ยืนยันการจอง
                             </button>
@@ -260,6 +264,7 @@ if (!empty($_POST['srchTime'])) {
 <!-- For Alert  -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 $(document).ready(function() {
     $("#datepicker").datepicker_thai({
@@ -270,11 +275,14 @@ $(document).ready(function() {
         langTh: true,
         yearTh: true,
     });
-});
 
-// fnAlertErr(){
-//     $.alert({title: 'ขอภัยค่ะ',content: 'ขอภัยค่ะ หมอนวดคนนี้กำลังอยู่ในช่วงเวลาบริการค่ะ กรุณาเลือกหมอนวดใหม่',})
-// }
+    // $('#btnBooking').click(function(){
+    //     var num= <?=$n?> ;
+    //     if( num != 0 ){
+    //         swal('ขออภัยคะ', 'ขออภัยคะ หมอนวดคนนี้ถูกจองคิว ช่วงเวลานี้แล้ว', 'warning');
+    //     }
+    // });
+});
 </script>
 
 </html>

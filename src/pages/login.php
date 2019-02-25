@@ -58,7 +58,7 @@ if (isset($_POST['save'])) {
                                 เข้าสู่ระบบ
                             </span>
                             <div class="wrap-input100 validate-input">
-                                <input autocomplete="false" class="form-control" type="text" name="username"
+                                <input autocomplete="off" class="form-control" type="text" name="username"
                                     placeholder="ชื่อผู้ใช้งาน">
                                 <span class="focus-input100-1"></span>
                                 <span class="focus-input100-2"></span>
