@@ -204,7 +204,7 @@ body{
 
 .image.profile{
 	width: 130px;
-	height: 130px;
+	/* height: 130px; */
 	border: 1px solid;
 	border-radius: 4px;
 	padding: 20px;
@@ -278,6 +278,40 @@ tr.click-me:hover{
 	cursor: pointer;
 	background-color: springgreen !important;
 	color:#fff;
+}
+.fa.icon{
+	font-size: 16px;
+}
+.icon.fa-ban{
+	color: orangered;
+}
+.icon.fa-check{
+	color: mediumspringgreen;
+}
+.icon.fa-pencil-square-o,.icon.fa-eye{
+	color: dodgerblue;
+}
+.icon.fa-file-pdf-o{
+	font-size: 20px;
+	color: magenta;
+}
+.order-header{
+	font-size: 16px;
+	font-weight: 700;
+	padding: 10px 15px;
+}
+.order-value{
+	font-weight: 400;
+}
+.bd-bottom{
+	border-bottom: 1px solid #ddd;
+}
+.print-order{
+	padding-top: 20px;
+	padding-right: 30px;
+}
+.print-booking{
+	padding: 10px 15px;
 }
 .topic_h{
 	/* border: 1px solid pink; */

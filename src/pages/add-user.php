@@ -89,7 +89,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             เพิ่มข้อมูลผู้ใช้งาน

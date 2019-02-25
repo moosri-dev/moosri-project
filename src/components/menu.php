@@ -19,7 +19,7 @@
         <li class="dropdown">
             <a class="dropdown-toggle profile" data-toggle="dropdown" href="#">
                 <?php
-                    echo "<img src ='uploads/".$_SESSION['user_img']."' class='image-profile'/> &nbsp&nbsp".$_SESSION['user_name'];
+                    echo "<img src ='uploads/".str_replace("","uploads/",$_SESSION['user_img'])."' class='image-profile'/> &nbsp&nbsp".$_SESSION['user_name'];
                 ?>
             </a>
             <ul class="dropdown-menu dropdown-user">
@@ -62,6 +62,18 @@
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลเวลาทำงาน<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="pages/sign-in-out-management.php"><i class="fa fa-male" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เวลาทำงาน</a>
+                        </li>
+                        <li>
+                            <a href="pages/massager-management.php"><i class="fa fa-female" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลหมอนวด</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+                <li>
                     <a href="#"><i class="fa fa-product-hunt" aria-hidden="true"></i></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลสินค้า<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -82,9 +94,6 @@
                         </li>
                         <li>
                             <a href="pages/add-items.php"><i class="fa fa-money" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มรายการขายสินค้า</a>
-                        </li>
-                        <li>
-                            <a href="pages/bill-report.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp พิมพ์รายการขายสินค้า</a>
                         </li>
                     </ul>
                 <!-- /.nav-second-level -->
@@ -107,7 +116,13 @@
                     <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลการจอง<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="pages/booking-details-management.php"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลจองรายการนวด</a>
+                            <a href="pages/booking-details-management.php"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลรออนุมัติการจอง</a>
+                        </li>
+                        <li>
+                            <a href="pages/user-booking-management.php"><i class="fa fa-table" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ตารางเวลาหมอนวด</a>
+                        </li>
+                        <li>
+                            <a href="pages/view-booking-details-management.php"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลการจองทั้งหมด</a>
                         </li>
                         <li>
                             <a href="pages/add-booking-details.php"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เพิ่มข้อมูลการจอง</a>
@@ -115,7 +130,6 @@
                     </ul>
                 <!-- /.nav-second-level -->
                 </li>
-                
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

@@ -33,7 +33,7 @@
             if($stmt = $mysqli->prepare($sql)){
 
                 /* bind parameters for markers */
-                $stmt->bind_param('ssid',$bname,$detail,$btime,$cost);
+                $stmt->bind_param('sssd',$bname,$detail,$btime,$cost);
                 
                 /* execute query */
                 if($stmt->execute()){

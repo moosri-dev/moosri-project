@@ -78,7 +78,7 @@
                                     <tr>
                                         <th class="text-center" style="width:5%">#</th>
                                         <th class="text-center" style="width:20%">รายการบริการ</th>
-                                        <th class="text-center" style="width:20%">รายละเอียด</th>
+                                        <th class="text-center" style="width:15%">รายละเอียด</th>
                                         <th class="text-center" style="width:15%">เวลา/นาที</th>
                                         <th class="text-center" style="width:20%">ค่าบริการ</th>
                                         <th class="text-center" style="width:5%">แก้ไข</th>

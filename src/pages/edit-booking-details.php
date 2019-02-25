@@ -106,7 +106,8 @@
                                     <div class="col-md-8">
                                        <select name="uid" class="form-control" required>
                                             <?php 
-                                                $sql= 'SELECT user_id as uid, user_name as uname FROM hm_user WHERE status_id=?$status = 2';
+                                                $status = 2;
+                                                $sql= 'SELECT user_id as uid, user_name as uname FROM hm_user WHERE status_id=?';
                                                 $stmt->bind_param("i",$status);
                                                 
                                                 if($stmt = $mysqli->prepare($sql)){

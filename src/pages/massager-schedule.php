@@ -52,7 +52,8 @@
                                 $stmt->execute();
                                 $result  = $stmt->get_result();
                                 while($rs=$result->fetch_object()){
-                                    echo '<b>ชื่อหมอนวด: <span style="color:blue;">'.$rs->uname.'</span></b>';
+                                    echo '<p><b>ชื่อหมอนวด: <span style="color:blue;">'.$rs->uname.'</span></b></p>';
+                                    echo '<p>วันที่: '.$_GET['ddate'].'</p>';
                                 }
                                 $stmt->close();
                             }
@@ -77,8 +78,8 @@
                                         <th class="text-center" style="width:10%">เวลาเริ่มต้น</th>
                                         <th class="text-center" style="width:10%">เวลาสิ้นสุด</th>
                                         <th class="text-center" style="width:15%">รายการบริการ</th>
-                                        <th class="text-center" style="width:15%">รายละเอียด</th>
                                         <th class="text-center" style="width:10%">เวลา/นาที.</th>
+                                        <th class="text-center" style="width:15%">ราคา</th>
                                         <th class="text-center" style="width:15%">ชื่อลูกค้า</th>
                                         <th class="text-center" style="width:10%">เบอร์โทร</th>
                                         <th class="text-center" style="width:10%">ไลน์</th>
@@ -89,12 +90,15 @@
                                   <?php
                                     include('../config/connect-db.php');
                                     $sql= 'SELECT d.bk_id as id, d.bk_fullname as dname, d.bk_tel as tel, d.bk_line as dline, d.bk_time as startDate
-                                    , d.bk_time_end as endDate, d.hm_user_id as uid, b.bk_name as bname, b.bk_detail as detail, b.bk_time as btime
+                                    , d.bk_time_end as endDate,d.bk_date as ddate,d.status as st
+                                    , d.hm_user_id as uid, b.bk_name as bname, b.bk_detail as detail
+                                    , b.bk_time as btime, b.bk_cost as cost
                                         FROM hm_booking_details d INNER JOIN hm_booking b ON d.bk_id_fk = b.bk_id
-                                        WHERE hm_user_id = ?';
-
+                                        WHERE hm_user_id = ? AND d.bk_date =? AND d.status <> ?';
+                        
                                     if($stmt = $mysqli->prepare($sql)){
-                                        $stmt->bind_param('i',$_GET['id']);
+                                        $status = 0;
+                                        $stmt->bind_param('isi',$_GET['id'],$_GET['ddate'],$status);
                                         $stmt->execute();
                                         $result  = $stmt->get_result();
                                         $row = 1;
@@ -104,8 +108,8 @@
                                             echo '<td class="text-center">'.$rs->startDate.'</td>';
                                             echo '<td class="text-center">'.$rs->endDate.'</td>';
                                             echo '<td class="text-center">'.$rs->bname.'</td>';
-                                            echo '<td class="text-center">'.$rs->detail.'</td>';
                                             echo '<td class="text-center">'.$rs->btime.'</td>';
+                                            echo '<td class="text-center">'.$rs->cost.'</td>';
                                             echo '<td class="text-center">'.$rs->dname.'</td>';
                                             echo '<td class="text-center">'.$rs->tel.'</td>';
                                             echo '<td class="text-center">'.$rs->dline.'</td>';
@@ -123,7 +127,7 @@
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
-                    <a class="btn btn-lg btn-primary" href="pages/booking-details-management.php"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspย้อนกลับ</a>
+                    <a class="btn btn-lg btn-primary" href="pages/user-booking-management.php"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbspย้อนกลับ</a>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

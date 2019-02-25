@@ -93,7 +93,7 @@
                                             <th class="text-center">วันที่</th>
                                             <th class="text-center">เบอร์โทร</th>
                                             <th class="text-center">ไลน์</th>
-                                            <th class="text-center">อนุมัติ/ยกเลิก</th>
+                                            <th class="text-center">สถานะการจอง</th>
                                             <th class="text-center">แก้ไข</th>
                                         </tr>
                                     </thead>
@@ -109,9 +109,8 @@
                                         if($stmt = $mysqli->prepare($sql)){
                                             $stmt->execute();
                                             $result  = $stmt->get_result();
-                                            $rows = 1;
+                                            $rows  = 1;
                                             while($rs=$result->fetch_object()){
-                                                if($rs->st ==1){
                                                     echo '<tr>';
                                                     echo '<td class="text-center">'.$rows.'</td>';
                                                     echo '<td class="text-center">'.$rs->bname.'</td>';
@@ -122,15 +121,16 @@
                                                     echo '<td class="text-center">'.$rs->ddate.'</td>';
                                                     echo '<td class="text-center">'.$rs->tel.'</td>';
                                                     echo '<td class="text-center">'.$rs->bline.'</td>';
-                                                    echo '<td class="text-center">';
-                                                    echo  '<i class="fa fa-check icon" aria-hidden="true" onclick="approveBooking('.$rs->bid.',2)"></i>';
-                                                    echo  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-                                                    echo  '<i class="fa fa-ban icon" aria-hidden="true" onclick="cancelBooking('.$rs->bid.',0)"></i>';
-                                                    echo '</td>';
+                                                        if($rs->st == 1){
+                                                            echo '<td class="text-center booking-status" style="color:blue; font-weight:700;">รอการอนุมัติการจอง</td>';
+                                                        }else if($rs->st == 2){
+                                                            echo '<td class="text-center booking-status" style="color:green;font-weight:700;">อนุมัติการจองแล้ว</td>';
+                                                        }else {
+                                                            echo '<td class="text-center booking-status" style="color:red;font-weight:700;">ยกเลิกการจอง</td>';
+                                                        }
                                                     echo '<td class="text-center"><i class="fa fa-pencil-square-o icon" aria-hidden="true" onclick="editBooking('.$rs->bid.')"></i></td>';
                                                     echo '</tr>';
                                                     $rows++;
-                                                }
                                             }
                                             $stmt->close();
                                         }
