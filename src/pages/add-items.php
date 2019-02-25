@@ -29,6 +29,7 @@
         $total = $_POST['total'];
         $detail =  $_POST['detail'];
         $sumTotal = 0;
+        $sumUnit = 0;
         $createDate = $_POST['createDate'];
         $userId = $_SESSION['user_id'];
 
@@ -84,11 +85,14 @@
         foreach($total as $t){
             $sumTotal += $t;
         }
+        foreach($unit as $u){
+            $sumUnit += $u;
+        }
 
-        $sql = "INSERT INTO hm_orders(order_details,user_id,total,create_date) 
-        VALUES(?,?,?,?)";
+        $sql = "INSERT INTO hm_orders(order_details,user_id,price_total,quantity_total,create_date) 
+        VALUES(?,?,?,?,?)";
         if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param('sids',$detail,$userId,$sumTotal,$createDate);
+            $stmt->bind_param('sidis',$detail,$userId,$sumTotal,$sumUnit,$createDate);
 
             if($stmt->execute()){
                 $oid = $mysqli->insert_id;
@@ -138,7 +142,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             ตารางเพิ่มข้อมูลรายการขายสินค้า

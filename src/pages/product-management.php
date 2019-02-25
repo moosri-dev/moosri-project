@@ -95,7 +95,7 @@
                                         while($rs=$result->fetch_object()){
                                             echo '<tr>';
                                             echo '<td class="text-center">'.$rows.'</td>';
-                                            echo '<td class="text-center"><img src="'.'uploads/'.$rs->image.'" class="item image"/></td>';
+                                            echo '<td class="text-center"><img src="'.'uploads/'.str_replace("","uploads/",$rs->image).'" class="item image"/></td>';
                                             echo '<td class="text-center">'.$rs->pname.'</td>';
                                             echo '<td class="text-center">'.$rs->detail.'</td>';
                                             echo '<td class="text-center">'.$rs->price.'</td>';

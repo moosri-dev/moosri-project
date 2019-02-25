@@ -33,30 +33,20 @@
             });
         });
 
-        function approveBooking(bid,bst){
-                $.post('pages/approve-booking-details.php',{id:bid,status:bst},function(response){
-               if(response){
-                alert("Approve Booking Success.");
-                location.reload();
-               }else{
-                   alert('Approve Booking Failed.');
-                }
-             });
-        }
-        function cancelBooking(bid,bst){
-                $.post('pages/approve-booking-details.php',{id:bid,status:bst},function(response){
-               if(response){
-                alert("Cancel Booking Success.");
-                location.reload();
-               }else{
-                   alert('Cancel Booking Failed.');
-                }
-             });
-        }
         function editBooking(id){
             let url = "pages/edit-booking-details.php?id="+id;
             window.location.href = url;
         }
+
+        function viewBookingDetails(id,ddate){
+            let url = "pages/massager-schedule.php?id="+id+"&ddate="+ddate;
+            window.location.href = url;
+        }
+        function print(id,ddate){
+            let url = "pages/booking-report.php?id="+id+"&ddate="+ddate;
+            window.location.href = url;
+        }
+
     </script>
 
     
@@ -85,15 +75,12 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">#</th>
-                                            <th class="text-center">รายการบริการ</th>
                                             <th class="text-center">ชื่อหมอนวด</th>
-                                            <th class="text-center">ชื่อลูกค้า</th>
                                             <th class="text-center">เวลาเริ่มต้น</th>
                                             <th class="text-center">เวลาสิ้นสุด</th>
                                             <th class="text-center">วันที่</th>
-                                            <th class="text-center">เบอร์โทร</th>
-                                            <th class="text-center">ไลน์</th>
-                                            <th class="text-center">อนุมัติ/ยกเลิก</th>
+                                            <th class="text-center">รายได้รวม</th>
+                                            <th class="text-center">พิมพ์</th>
                                             <th class="text-center">แก้ไข</th>
                                         </tr>
                                     </thead>
@@ -101,36 +88,27 @@
                                     <?php
                                         include('../config/connect-db.php');
                                         $sql= 'SELECT d.bk_id as bid, d.bk_fullname as fullname, d.bk_tel as tel
-                                        , d.bk_line as bline, d.bk_time as startDate, d.bk_time_end as endDate,d.bk_date as ddate,d.status as st
-                                        , u.user_id as uid, u.user_name as username, b.bk_name as bname
+                                        , d.bk_line as bline, MIN(TIME_FORMAT(d.bk_time, "%H:%i")) as startDate, MAX(TIME_FORMAT(d.bk_time_end,"%H:%i")) as endDate, d.bk_date as ddate,d.status as st
+                                        , u.user_id as uid, u.user_name as username, b.bk_name as bname,SUM(b.bk_cost) as cost
                                                 FROM hm_booking_details d INNER JOIN hm_booking b ON d.bk_id_fk = b.bk_id
-                                                INNER JOIN hm_user u ON d.hm_user_id = u.user_id';
+                                                INNER JOIN hm_user u ON d.hm_user_id = u.user_id  WHERE d.status <> ? GROUP BY d.bk_date';
                                         
                                         if($stmt = $mysqli->prepare($sql)){
+                                            $status = 0;
+                                            $stmt->bind_param('i',$status);
                                             $stmt->execute();
                                             $result  = $stmt->get_result();
-                                            $rows = 1;
                                             while($rs=$result->fetch_object()){
-                                                if($rs->st ==1){
                                                     echo '<tr>';
-                                                    echo '<td class="text-center">'.$rows.'</td>';
-                                                    echo '<td class="text-center">'.$rs->bname.'</td>';
+                                                    echo '<td class="text-center"><i class="fa fa-eye icon" onclick="viewBookingDetails('.$rs->uid.',\''.$rs->ddate.'\')"></i></td>';
                                                     echo '<td class="text-center">'.$rs->username.'</td>';
-                                                    echo '<td class="text-center">'.$rs->fullname.'</td>';
                                                     echo '<td class="text-center">'.$rs->startDate.'</td>';
                                                     echo '<td class="text-center">'.$rs->endDate.'</td>';
                                                     echo '<td class="text-center">'.$rs->ddate.'</td>';
-                                                    echo '<td class="text-center">'.$rs->tel.'</td>';
-                                                    echo '<td class="text-center">'.$rs->bline.'</td>';
-                                                    echo '<td class="text-center">';
-                                                    echo  '<i class="fa fa-check icon" aria-hidden="true" onclick="approveBooking('.$rs->bid.',2)"></i>';
-                                                    echo  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-                                                    echo  '<i class="fa fa-ban icon" aria-hidden="true" onclick="cancelBooking('.$rs->bid.',0)"></i>';
-                                                    echo '</td>';
+                                                    echo '<td class="text-center">'.$rs->cost.'</td>';
+                                                    echo '<td class="text-center"><i class="fa fa-file-pdf-o icon" aria-hidden="true" onclick="print('.$rs->uid.',\''.$rs->ddate.'\');"></i></td>';
                                                     echo '<td class="text-center"><i class="fa fa-pencil-square-o icon" aria-hidden="true" onclick="editBooking('.$rs->bid.')"></i></td>';
                                                     echo '</tr>';
-                                                    $rows++;
-                                                }
                                             }
                                             $stmt->close();
                                         }

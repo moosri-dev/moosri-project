@@ -7,10 +7,10 @@
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param('i',$bid);
         if($stmt->execute()){
-
-            $sql2 = "DELETE FROM hm_booking_details WHERE bk_id_fk = ?";
+            $status = 1;
+            $sql2 = "DELETE FROM hm_booking_details WHERE bk_id_fk = ? AND status = ?";
             if($stmt2 = $mysqli->prepare($sql2)){
-                $stmt2->bind_param('i',$bid);
+                $stmt2->bind_param('ii',$bid,$status);
                 if($stmt2->execute()){
                 }
                 $stmt2->close();

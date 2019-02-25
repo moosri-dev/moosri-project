@@ -5,7 +5,7 @@
    $dbname='moosi-massage';
    $port = "80";
    $socket= "";
-   $mysqli = new mysqli($host,$user,$pwd,$dbname,$port,$socket);
+   $mysqli = new mysqli($host,$user,$pwd,$dbname);
    if($mysqli->connect_error){
       die("Connection Database Fail. Check and Try again".$conDB->connect_error);
    }else{

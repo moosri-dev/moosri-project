@@ -53,10 +53,15 @@
             $line = $_POST['line'];
             $startDate = $_POST['startDate'];
             $endDate = $_POST['endDate'];
+            $createDate =$_POST['createDate'];
+            $dateArr = explode('-',$createDate);
+            $date = $dateArr[2]."/".$dateArr[1]."/".((int)$dateArr[0]+543);
+
+            $status = 1;
     
-            $sql = 'SELECT u.user_name as uname, MIN(TIME_FORMAT(d.bk_time, "%H:%i")) as startDate,MAX(TIME_FORMAT(d.bk_time_end,"%H:%i")) as endDate FROM hm_booking_details d INNER JOIN hm_user u ON u.user_id = d.hm_user_id WHERE d.hm_user_id = ?';
+            $sql = 'SELECT u.user_name as uname, MIN(TIME_FORMAT(d.bk_time, "%H:%i")) as startDate,MAX(TIME_FORMAT(d.bk_time_end,"%H:%i")) as endDate FROM hm_booking_details d INNER JOIN hm_user u ON u.user_id = d.hm_user_id WHERE d.hm_user_id = ? AND d.bk_date = ?';
             if($stmt = $mysqli->prepare($sql)){
-                $stmt->bind_param('i',$uid);
+                $stmt->bind_param('is',$uid,$date);
                 if($stmt->execute()){
                     $result  = $stmt->get_result();
                     while($rs=$result->fetch_object()){
@@ -83,13 +88,13 @@
                 }
                 $stmt -> close();
             }
-            $sql2 = 'INSERT INTO hm_booking_details(bk_fullname,bk_tel,bk_line,bk_time,bk_time_end,hm_user_id,bk_id_fk) 
-                    VALUES(?,?,?,?,?,?,?)';
+            $sql2 = 'INSERT INTO hm_booking_details(bk_fullname,bk_tel,bk_line,bk_time,bk_time_end,hm_user_id,bk_id_fk,bk_date,status) 
+                    VALUES(?,?,?,?,?,?,?,?,?)';
     
             include('../config/connect-db.php');
             if($stmt = $mysqli->prepare($sql2)){
                 /* bind parameters for markers */
-                $stmt->bind_param('sssssii',$cusname,$tel,$line,$startDate,$endDate,$uid,$bkid);
+                $stmt->bind_param('sssssiisi',$cusname,$tel,$line,$startDate,$endDate,$uid,$bkid,$date,$status);
                 
                 /* execute query */
                 if($stmt->execute()){
@@ -117,7 +122,7 @@
     <div id="wrapper">
         <?php include('../components/menu.php'); ?>
         <div id="page-wrapper">
-
+        
         <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">ข้อมูลจองรายการนวด</h1>
@@ -128,7 +133,7 @@
             <div class="col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                        แก้ไขข้อมูลการจอง
+                        เพิ่มข้อมูลการจอง
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -205,6 +210,15 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input type="text" name="line" class="form-control" maxlength="50" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-right">
+                                        <label for="inputCreateDate">วันที่<span class="required">*</span> :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="date" name="createDate" class="form-control" min="2019-01-01" max="2030-12-31" onkeydown="return false" required/>
                                     </div>
                                 </div>
 
