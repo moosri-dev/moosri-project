@@ -14,31 +14,25 @@
         include('../assets/scripts/admin-script.php');
         echo '<title>'.$title.'</title>';
         include('../config/connect-db.php');
-        
-        if(isset($_POST['save'])){
-           $uid = $_POST['uid'];
-           $status = 1;
 
-           $spDate = explode('/',date('d/m/Y'));
-           $day = $spDate[0];
-           $month = $spDate[1];
-           $year = (int)$spDate[2]+543;
-            $ctime = date('H:i:s');
-            $startDate = $day."/".$month."/".$year+":"+$ctime;
+        $sql2 = "SELECT u.user_id as uid, u.user_name as uname, w.status as st  
+        FROM hm_user u LEFT JOIN hm_works w ON u.user_id = w.user_id WHERE u.status_id = ?";
 
-            $sql = "INSERT INTO hm_works(user_id,start_date,status) VALUES(?,?,?)";
-            if($stmt = $mysqli->prepare($sql)){
-                $stmt->bind_param("isi",$uid,$startDate,$status);
-                if($stmt->execute()){
-                    echo "Insert data success!";
-                    header('location: admin-management.php');
-                }else{
-                    echo "Error:".$sql."<br>".$mysqli->error;
-                    header('refresh:2;');
+        if($stmt = $mysqli->prepare($sql2)){
+            $st = 2;
+            $stmt->bind_param("s",$st);
+
+            if($stmt->execute()){
+                $result  = $stmt->get_result();
+                while($rs=$result->fetch_object()){
+                    $userList[$rs->uid] = $rs->uname;
+                    $statusList[$rs->uid] = $rs->st;
                 }
-                $stmt -> close();
             }
+            $stmt->close();
         }
+        $mysqli->close();
+
     ?>
 </head>
 
@@ -46,80 +40,102 @@
     <div id="wrapper">
         <?php include('../components/menu.php'); ?>
         <div id="page-wrapper">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">จัดการข้อมูลเวลาทำงาน</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <div class="row">
-            <div class="col-lg-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            เวลาทำงาน
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="myTable">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:5%;">#</th>
-                                            <th style="width:25%;">รูปโปรไฟล์</th>
-                                            <th style="width:25%;">ชื่อผู้ใช้งาน</th>
-                                            <th style="width:25%;">ชื่อ-นามสกุล</th>
-                                            <th style="width:10%;">แก้ไข</th>
-                                            <th style="width:10%;">ลบ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                        include('../config/connect-db.php');
-                                        $status_id = 2;
-                                        $sql= 'SELECT 
-                                                    u.user_id as id, u.user_user as username,u.user_name as name
-                                                    ,u.user_img as image
-                                                FROM hm_user u
-                                                WHERE u.status_id =?';
-
-                                        if($stmt = $mysqli->prepare($sql)){
-                                            $stmt->bind_param('i',$status_id);
-                                            $stmt->execute();
-                                            $result  = $stmt->get_result();
-                                            $rows = 1;
-                                            while($rs=$result->fetch_object()){
-                                                echo '<tr>';
-                                                echo '<td class="text-center">'.$rows.'</td>';
-                                                echo '<td class="text-center"><img src="'.'uploads/'.$rs->image.'" class="item image"/></td>';
-                                                echo '<td class="text-center">'.$rs->username.'</td>';
-                                                echo '<td class="text-center">'.$rs->name.'</td>';
-                                                echo '<td class="text-center"><i class="fa fa-pencil-square-o icon" aria-hidden="true" onclick="editUser('.$rs->id.')"></i></td>';
-                                                echo '<td class="text-center"><i class="fa fa-ban icon" aria-hidden="true" onclick="deleteUser('.$rs->id.','."'$rs->username'".')"></i></td>';
-                                                echo '</tr>';
-                                                $rows++;
-                                            }
-                                            $stmt->close();
-                                        }
-                                        $mysqli->close();
-                                    ?>
-                                    </tbody>
-                                </table>
-                                <!-- /.table-responsive -->
-                            </div>
-                        </div>
-                        <!-- /.panel-body -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">จัดการข้อมูลเวลาทำงาน</h1>
                     </div>
-                    <!-- /.panel -->
+                    <!-- /.col-lg-12 -->
                 </div>
-                <!-- /.col-lg-12 -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                จัดการเวลาทำงาน
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <form name="myForm" method="post">
+                                    <div class="row">
+                                      <?php foreach($userList as $key => $value){?>
+                                        <div class="col-md-3">
+                                            <div class="card-container">
+                                                <div class="card-header">
+                                                    <div class="title">
+                                                        ชื่อพนักงาน:
+                                                    </div>
+                                                    <div class="subTitle">
+                                                        <?php echo $value;?>
+                                                    </div>
+                                                </div>
+                                                <div class="card-content">
+                                                    <div class="card-label">
+                                                        สถานะ:
+                                                    </div>
+                                                    <div class="card-value">
+                                                        <?php 
+                                                            if($statusList[$key] == 1){
+                                                                 echo "<span style='color:green; font-weight:700;'>ลงชื่อเข้าทำงานแล้ว</span>";
+                                                            }else{
+                                                                echo "<span>ยังไม่ได้ลงชื่อเข้าทำงาน</span>";
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <?php if($statusList[$key] != 1){?>
+                                                        <button type="button" class="btn btn-block btn-md btn-success" name="btnSave" id="btnSave" onclick="signIn(<?php echo $key.',\''.$value.'\'';?>)">ลงชื่อเข้างาน</button>
+                                                    <?php }else{ ?>
+                                                        <button type="button" class="btn btn-block btn-md btn-danger" name="btnUpdate" id="btnUpdate" onclick="signOut(<?php echo $key.',\''.$value.'\'';?>)">ลงชื่อออกงาน</button>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      <?php }?>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
             </div>
-            <!-- /.row -->
-
+            <!-- /container-fluid -->
         </div>
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
 </body>
-<?php $mysqli->close(); ?>
+
+    <script type="text/javascript">
+       function signIn(uid,uname){
+            if(confirm("ยืนยันลงชื่อเข้างาน: "+uname)){
+                $.post('pages/sign-in.php','uid='+uid,function(response){
+               if(response){
+                    alert("ลงชื่อเข้างานสำเร็จ!!");
+                    location.reload();
+               }else{
+                   alert('ลงชื่อเข้างานล้มเหลว.');
+                }
+             });
+            }
+        }
+
+        function signOut(uid,uname){
+            if(confirm("ยืนยันลงชื่อออกงาน: "+uname)){
+                $.post('pages/sign-out.php','uid='+uid,function(response){
+               if(response){
+                    alert("ลงชื่อออกงานสำเร็จ!!");
+                    location.reload();
+               }else{
+                   alert('ลงชื่อออกงานล้มเหลว.');
+                }
+             });
+            }
+        }
+    </script>
+
 </html>

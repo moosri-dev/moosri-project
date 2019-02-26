@@ -313,3 +313,46 @@ tr.click-me:hover{
 .print-booking{
 	padding: 10px 15px;
 }
+.user-profile{
+	width: 100px;
+	border: 1px solid coral;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+
+.card-container{
+	border:1px solid #ccc;
+	border-radius: 4px;
+	padding: 10px;
+	font-weight: 700;
+}
+.card-container>.card-header{
+	text-align: center;
+	
+}
+.card-container>.card-header>.title{
+	color: gray;
+	font-size: 12px;
+}
+.card-container>.card-header>.subTitle{
+	color: royalblue;
+}
+.card-container>.card-content{
+	 background: ghostwhite;
+	 padding: 20px 0px;
+	 text-align: center;
+	 
+	 border-top: 1px solid;
+	 border-bottom: 1px solid;
+	 border-color: #ccc;
+	 margin: 10px -10px;
+}
+.card-container>.card-content>.card-label{
+	color: palevioletred;
+	font-size: 12px;
+}
+.card-container>.card-content>.card-value{
+	color: gray;
+	font-weight: 400;
+}

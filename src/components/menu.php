@@ -62,13 +62,13 @@
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลเวลาทำงาน<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการข้อมูลเวลาทำงาน<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="pages/sign-in-out-management.php"><i class="fa fa-male" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp เวลาทำงาน</a>
+                            <a href="pages/sign-in-out-management.php"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp จัดการเวลาทำงาน</a>
                         </li>
                         <li>
-                            <a href="pages/massager-management.php"><i class="fa fa-female" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ข้อมูลหมอนวด</a>
+                            <a href="pages/history-sign-in-out.php"><i class="fa fa-history" aria-hidden="true"></i>&nbsp&nbsp&nbsp&nbsp ประวัติข้อมูลเวลาเข้างาน</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
