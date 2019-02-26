@@ -42,7 +42,7 @@ function execUrl($ms)
     // follow redirects
     curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);
     //ADD header array
-    $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ij8zzguel0X9Cco0S1cM89FvztEB51h3VHhrKuPkPsG'); //  Bearer  line authen code �
+    $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer Ottacqm1XPMY7WVLzcEFGnhbUoAwsbfu9L8r8Yoe2jB'); //  Bearer  line authen code �
     curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
     //RETURN
     curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);

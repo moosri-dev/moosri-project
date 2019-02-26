@@ -22,11 +22,8 @@ if (isset($_POST['save'])) {
     $empid = $_POST['empid'];
     $timeS = $_POST['timeStart'];
     $timeE = $_POST['timeEnd'];
-    $gDate = $_POST['bk_date'];
-    $d = substr($gDate,0,2);
-    $m = substr($gDate,3,2);
-    $y = substr($gDate,6,5);
-    $date = $y.'-'.$m.'-'.$d;
+    $date = $_POST['bk_date'];
+
     //หาเวลาที่นวดตาม ชั่วโมงบริการ
     $ms2 = $mysqli->prepare("SELECT bk_time FROM hm_booking WHERE bk_id = ?");
     $ms2->bind_param("i", $bkid);
@@ -34,8 +31,8 @@ if (isset($_POST['save'])) {
     $list2 = $ms2->get_result();
 
     //check ก่อนว่า หมอนวดที่ถูกจอง ว่าเวลานี้ไหม
-    if ($qry = $mysqli->prepare("SELECT bk.*, ur.* FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE  bk_time_end <= ? AND bk.hm_user_id = ?")) {
-        $qry->bind_param('si', $timeE, $empid);
+    if ($qry = $mysqli->prepare("SELECT bk.*, ur.* FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE bk_date = ? AND bk_time_end <= ? AND bk.hm_user_id = ?")) {
+        $qry->bind_param('ssi', $date, $timeE, $empid);
         $qry->execute();
         $listChk = $qry->get_result();
         if ($listChk->num_rows != 0) {
@@ -127,13 +124,19 @@ if (isset($_POST['save'])) {
                         <div class="container">
                             <label for="topic"><i class="fas fa-map-marker"></i>&nbsp;ค้นหาหมอนวด</label>
                             <form method="POST">
-                                <div class="form-group">
+                                <div class="form-group col-md-12">
+                                    <label for="">วันที่</label>
+                                    <input type="text" autocomplete="off" name="dateSrh" id="dateSrh"
+                                        data-date-format="DD MMMM YYYY" class="col-xs-2" required>
                                     <label for="">ช่วงเวลา</label>
                                     <input type="time" name="timesSrh" id="timesSrh">
                                     <label for="">ถึง</label>
                                     <input type="time" name="timeeSrh" id="timeeSrh">
-                                    <button type="submit" name="srchTime" id="srchTime" class="btn btn-sm btn-primary"
-                                        btn-sm btn-block>ค้นหาหมอนวด</button>
+                                </div>
+                                <div class="text-right" style="margin-right:50px;">
+                                    <button type="submit" name="srchTime" id="srchTime"
+                                        class="btn btn-sm btn-primary" btn-sm btn-block>
+                                        <i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหาหมอนวด</button>
                                 </div>
                             </form>
                             <table class="table" style="zoom:0.9">
@@ -147,22 +150,23 @@ if (isset($_POST['save'])) {
                                 <tbody>
                                     <?php
 //Check เวลา ว่าถูกจองเวลานี้รึยัง
-if (!empty($_POST['srchTime'])) {
+if (isset($_POST['srchTime'])) {
     $timeS = $_POST['timesSrh'];
     $timeE = $_POST['timeeSrh'];
+    $dateSrh = $_POST['dateSrh'];
     $k = 1;
-    if ($qry = $mysqli->prepare("SELECT bk.*, ur.user_name FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE bk_time >= ? AND bk_time_end <= ? GROUP BY ur.user_name")) {
-        $qry->bind_param('ss', $timeS, $timeE);
+    echo $dateSrh.' - '.$timeS . ' - ' . $timeE;
+    if ($qry = $mysqli->prepare("SELECT bk.*, ur.user_name FROM hm_booking_details bk INNER JOIN hm_user ur ON bk.hm_user_id = ur.user_id WHERE bk_date = ? AND bk_time >= ? AND bk_time_end <= ? GROUP BY ur.user_name")) {
+        $qry->bind_param('sss', $dateSrh,$timeS, $timeE);
         $qry->execute();
         $listChk = $qry->get_result();
-
         while ($chk = $listChk->fetch_object()) {?>
                                     <tr>
                                         <td scope="row"><?=$k++;?></td>
                                         <td><?=$chk->user_name?></td>
                                         <td style="color:red;text-align:center;"> ไม่ว่าง</td>
                                     </tr>
-                                    <?php }} else {echo "Error";}}?>
+                                    <?php }} else {echo "Error"; } }?>
                                 </tbody>
                             </table>
                         </div>
@@ -185,7 +189,8 @@ if (!empty($_POST['srchTime'])) {
                         </div>
                         <div class="wrap-input100 validate-input">
                             <label class="col-md-4" for="tel">เบอร์โทร</label>
-                            <input class="form-control" type="text" autocomplete="off" placeholder="เบอร์โทร" name="tel" id="tel" required>
+                            <input class="form-control" type="text" autocomplete="off" placeholder="เบอร์โทร" name="tel"
+                                id="tel" required>
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
@@ -220,8 +225,8 @@ if (!empty($_POST['srchTime'])) {
                         </div>
                         <div class="wrap-input100 form-group">
                             <label class="col-md-4" for="time">วันที่จอง</label>
-                            <input type="text" autocomplete="off" name="bk_date" id="datepicker" data-date-format="DD MMMM YYYY"
-                                class="form-control" required>
+                            <input type="text" autocomplete="off" name="bk_date" id="datepicker"
+                                data-date-format="DD MMMM YYYY" class="form-control" required>
                         </div>
                         <div class="wrap-input100 validate-input form-group">
                             <label class="col-md-4" for="time">ช่วงเวลา</label>
@@ -276,12 +281,14 @@ $(document).ready(function() {
         yearTh: true,
     });
 
-    // $('#btnBooking').click(function(){
-    //     var num= <?=$n?> ;
-    //     if( num != 0 ){
-    //         swal('ขออภัยคะ', 'ขออภัยคะ หมอนวดคนนี้ถูกจองคิว ช่วงเวลานี้แล้ว', 'warning');
-    //     }
-    // });
+    $("#dateSrh").datepicker_thai({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: false,
+        changeYear: true,
+        numberOfMonths: 1,
+        langTh: true,
+        yearTh: true,
+    });
 });
 </script>
 

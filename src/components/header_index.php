@@ -20,7 +20,7 @@
                         <a class="nav-link" href="#">จองคิวหมอนวด<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">สินค้า</a>
+                        <a class="nav-link" href="src/pages/products.php">สินค้า</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">ดูข้อมูลรำยกำรนวดและรำคำค่ำบริกำร</a>
@@ -34,7 +34,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="src/pages/profile.php"><i class="fas fa-user"></i>&nbsp;ข้อมูลส่วนตัว</a>
-                            <a class="dropdown-item" href="#"><i class="fab fa-product-hunt"></i>&nbsp;ข้อมูลสินค้า</a>
+                            <a class="dropdown-item" href="src/pages/products.php"><i class="fab fa-product-hunt"></i>&nbsp;ข้อมูลสินค้า</a>
                             <a class="dropdown-item" href="src/pages/bookingList.php"><i class="fas fa-list-ol"></i>&nbsp;รายการนวด</a>
                             <a class="dropdown-item" href="src/pages/booking.php"><i class="far fa-address-book"></i>&nbsp;จองคิวนวด</a>
                             <a class="dropdown-item" href="src/pages/search.php"><i class="fas fa-search"></i>&nbsp;ค้นหาหมอนวด</a>
