@@ -40,7 +40,8 @@
                 
                 if($stmt->execute()){
                     echo "Insert data success!";
-                    header('location: admin-management.php');
+                    $lc=$status == 1?'admin-management.php':'massager-management.php';
+                    header('Refresh:2;url='.$lc);
                 }else{
                 echo "Error:".$sql."<br>".$mysqli->error;
                 header('refresh:2;');
