@@ -3,7 +3,7 @@
    $user = "root";
    $pwd = "";
    $dbname='moosi-massage';
-   $port = "80";
+   $port = "";
    $socket= "";
    $mysqli = new mysqli($host,$user,$pwd,$dbname,$port,$socket);
    if($mysqli->connect_error){
