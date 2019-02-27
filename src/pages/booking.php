@@ -124,22 +124,22 @@ if (isset($_POST['save'])) {
                         <div class="container">
                             <label for="topic"><i class="fas fa-map-marker"></i>&nbsp;ค้นหาหมอนวด</label>
                             <form method="POST">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-sm-12 col-md-12">
                                     <label for="">วันที่</label>
-                                    <input type="text" autocomplete="off" name="dateSrh" id="dateSrh"
+                                    <input type="text" style="width:100px;" autocomplete="off" name="dateSrh" id="dateSrh"
                                         data-date-format="DD MMMM YYYY" class="col-xs-2" required>
                                     <label for="">ช่วงเวลา</label>
                                     <input type="time" name="timesSrh" id="timesSrh">
                                     <label for="">ถึง</label>
                                     <input type="time" name="timeeSrh" id="timeeSrh">
                                 </div>
-                                <div class="text-right" style="margin-right:50px;">
-                                    <button type="submit" name="srchTime" id="srchTime"
+                                <div class="col-md-10 text-right">
+                                    <button type="submit" style="margin-right:40px;" name="srchTime" id="srchTime"
                                         class="btn btn-sm btn-primary" btn-sm btn-block>
                                         <i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหาหมอนวด</button>
                                 </div>
                             </form>
-                            <table class="table" style="zoom:0.9">
+                            <table class="table col-md-10" style="zoom:0.8">
                                 <thead>
                                     <tr>
                                         <th>#</th>

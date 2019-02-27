@@ -63,7 +63,7 @@ if (isset($_POST['save'])) {
                             <!-- <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
                         </div>
                     </div>
-                    <div class="user-info col-md-6">
+                    <div class="user-info col-md-4">
                         <label class="label_c" style="margin:10px 0px 0px -50px;font-size:26px;">ข้อมูลส่วนตัว</label>
                         <div class="row" style="margin:10px 0px -15px -50px;font-size:18px;">
                             <label class="label_c">ชื่อ-สกุล : <?=$_SESSION['user_name'];?></label>
