@@ -58,9 +58,25 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">จัดการข้อมูลรายการบริการ</h1>
+                    <div class="page-header">
+                        จัดการข้อมูลรายการบริการ
+                    </div>
                 </div>
                 <!-- /.col-lg-12 -->
+            </div>
+            <div class="row" style="margin-bottom:5px;">
+                <form method = "post" action="pages/booking-month-report.php">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2 text-right" style="padding: 8px 0px; font-weight:700;">
+                        ค้นหารายงานประจำเดือน:
+                    </div>
+                    <div class="col-md-3">
+                        <input type="month" name="monthOfYear" class="form-control" min="2019-01-01" max="2030-12-31"  required/>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-md btn-block btn-info" style="font-weight:700;">ค้นหา</button>
+                    </div>
+                </form>
             </div>
             <div class="row">
                 <div class="col-lg-12">
